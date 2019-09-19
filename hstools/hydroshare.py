@@ -3,7 +3,6 @@ from __future__ import print_function
 import os
 import getpass
 import glob
-from IPython.core.display import display, HTML
 from hs_restclient import HydroShare, HydroShareAuthBasic, HydroShareAuthOAuth2
 from hs_restclient import HydroShareHTTPException
 from datetime import datetime as dt
@@ -153,8 +152,8 @@ class hydroshare():
         try:
             res_type = restypes[resource_type]
         except KeyError:
-            display(HTML('<b style="color:red;">[%s] is not a valid '
-                         'HydroShare resource type.</p>' % resource_type))
+            print('<b style="color:red;">[%s] is not a valid '
+                         'HydroShare resource type.</p>' % resource_type)
             return None
 
         # get the 'derived resource' metadata
@@ -169,15 +168,15 @@ class hydroshare():
 
                 keywords = set(keywords + meta.keywords)
             except:
-                display(HTML('<b style="color:red;">Encountered an error '
+                print'<b style="color:red;">Encountered an error '
                              ' while setting the derivedFrom relationship '
                              ' using id=%s. Make sure this resource is '
                              ' is accessible to your account. '
-                             % derivedFromId))
-                display(HTML('<a href=%s target="_blank">%s<a>' %
+                             % derivedFromId)
+                print('<a href=%s target="_blank">%s<a>' %
                              ('https://www.hydroshare.org/resource/%s'
                               % derivedFromId, 'View the "DerivedFrom" '
-                              'Resource')))
+                              'Resource'))
                 return None
 
         f = None if len(content_files) == 0 else content_files[0]
@@ -192,10 +191,10 @@ class hydroshare():
                                             resource_file=f,
                                             keywords=keywords)
 
-        display(HTML('Resource id: %s' % resid))
-        display(HTML('<a href=%s target="_blank">%s<a>' %
+        print('Resource id: %s' % resid)
+        print('<a href=%s target="_blank">%s<a>' %
                      ('https://www.hydroshare.org/resource/%s'
-                      % resid, 'Open Resource in HydroShare')))
+                      % resid, 'Open Resource in HydroShare'))
 
         # add the remaining content files to the hs resource
         try:
@@ -247,8 +246,8 @@ class hydroshare():
                 print('Successfully downloaded resource %s' % resourceid)
 
             except Exception as e:
-                display(HTML('<b style="color:red">Failed to retrieve '
-                             'resource content from HydroShare: %s</b>' % e))
+                print'<b style="color:red">Failed to retrieve '
+                             'resource content from HydroShare: %s</b>' % e)
                 return None
 
         # load the resource content
@@ -300,14 +299,14 @@ class hydroshare():
 
         resdir = utilities.find_resource_directory(resourceid)
         if resdir is None:
-            display(HTML('<b style="color:red">Could not find any resource '
+            print('<b style="color:red">Could not find any resource '
                          'matching the id [%s].</b> <br> It is likely that '
                          'this resource has not yet been downloaded from '
                          'HydroShare.org, or it was removed from the '
                          'JupyterHub server. Please use the following '
                          'command to aquire the resource content: '
                          '<br><br><code>hs.getResourceFromHydroShare(%s)'
-                         '</code>.' % (resourceid, resourceid)))
+                         '</code>.' % (resourceid, resourceid))
             return
 
         # create search paths.  Need to check 2 paths due to hs_restclient bug #63.
@@ -320,14 +319,14 @@ class hydroshare():
             content_files = glob.glob(p)
             if len(content_files) > 0:
                 found_content = True
-                display(HTML('<p>Downloaded content is located at: %s</p>' % resdir))
-                display(HTML('<p>Found %d content file(s). \n</p>'
-                             % len(content_files)))
+                print('<p>Downloaded content is located at: %s</p>' % resdir)
+                print('<p>Found %d content file(s). \n</p>'
+                             % len(content_files))
             for f in content_files:
                 fname = os.path.basename(f)
                 content[fname] = f
         if len(content.keys()) == 0:
-            display(HTML('<p>Did not find any content files for resource id: %s</p>' % resourceid))
+            print('<p>Did not find any content files for resource id: %s</p>' % resourceid)
 
         utilities.display_resource_content_files(content)
         self.content = content
