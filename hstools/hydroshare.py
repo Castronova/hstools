@@ -168,7 +168,7 @@ class hydroshare():
 
                 keywords = set(keywords + meta.keywords)
             except:
-                print'<b style="color:red;">Encountered an error '
+                print('<b style="color:red;">Encountered an error '
                              ' while setting the derivedFrom relationship '
                              ' using id=%s. Make sure this resource is '
                              ' is accessible to your account. '
@@ -246,7 +246,7 @@ class hydroshare():
                 print('Successfully downloaded resource %s' % resourceid)
 
             except Exception as e:
-                print'<b style="color:red">Failed to retrieve '
+                print('<b style="color:red">Failed to retrieve '
                              'resource content from HydroShare: %s</b>' % e)
                 return None
 
