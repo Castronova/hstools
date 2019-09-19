@@ -1,8 +1,6 @@
 from __future__ import print_function
 import os
-from IPython.core.display import display, HTML
 import glob
-
 from .compat import *
 
 
@@ -56,32 +54,40 @@ def display_tree(resid):
 
 
 def display_resource_content_files(content_file_dictionary,
-                                   text='Found the following content when parsing the HydroShare resource:'):
+                                   text='Found the following content when '
+                                        'parsing the HydroShare resource:'):
 
     # get ipynb files
     nbs = check_for_ipynb(content_file_dictionary)
     if len(nbs.keys()) > 0:
-        display(HTML('<b>Found the following notebook(s) associated with this HydroShare resource.</b><br>Click the link(s) below to launch the notebook.'))
+        print('<b>Found the following notebook(s) associated with this'
+              'HydroShare resource.</b><br>Click the link(s) below to launch'
+              'the notebook.')
 
         for name, url in nbs.items():
-            display(HTML('<a href=%s target="_blank">%s<a>' % (url, name)))
+            print('<a href=%s target="_blank">%s<a>' % (url, name))
 
-    # print the remaining files    
+    # print the remaining files
     if len(content_file_dictionary.keys()) > 0:
-        display(HTML('<b>Found the following file(s) associated with this HydroShare resource.</b>'))
+        print('<b>Found the following file(s) associated with this '
+              'HydroShare resource.</b>')
 
         text = '<br>'.join(content_file_dictionary.keys())
-        display(HTML(text))
+        print(text)
 
     if (len(content_file_dictionary.keys()) + len(nbs.keys())) > 0:
-        display(HTML('These files are stored in a dictionary called <b>hs.content</b> for your convenience.  To access a file, simply issue the following command where MY_FILE is one of the files listed above: <pre>hs.content["MY_FILE"] </pre> '))
+        print('These files are stored in a dictionary called '
+              '<b>hs.content</b> for your convenience.  To access a file, '
+              'simply issue the following command where MY_FILE is one of '
+              'the files listed above: <pre>hs.content["MY_FILE"] </pre> ')
 
 
 def load_environment(env_path=None):
 
     # load the environment path (if it exists)
     if env_path is None:
-        env_path = os.path.join(os.environ.get('NOTEBOOK_HOME', './'), '.env' )
+        env_path = os.path.join(os.environ.get('NOTEBOOK_HOME', './'),
+                                '.env')
 
     if not os.path.exists(env_path):
         return
@@ -102,7 +108,8 @@ def get_env_var(varname):
     if varname in os.environ.keys():
         return os.environ[varname]
     else:
-        return input('Could not find %s, please specify a value: ' % varname).strip()
+        return input('Could not find %s, please specify a value: '
+                     % varname).strip()
 
 
 def get_server_url_for_path(p):
