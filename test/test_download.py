@@ -72,7 +72,7 @@ class TestDownload(unittest.TestCase):
 
         # download a published resource
         resid = '1be4d7902c87481d85b93daad99cf471'
-        hs.getResourceFromHydroShare(resid)
+        hs.getResource(resid)
         self.assertTrue(os.path.exists(os.path.join(d, f'{resid}')))
 
         # clean up

@@ -43,50 +43,9 @@ class hydroshare():
         if self.hs is None:
             self.hs = auth.basic_authorization()
 
-
     def _addContentToExistingResource(self, resid, content_files):
         for f in content_files:
             self.hs.addResourceFile(resid, f)
-
-    def getSecureConnection(self, username=None):
-        """Establishes a secure connection with hydroshare.
-
-        args:
-        -- email: email address associated with hydroshare
-
-        returns:
-        -- hydroshare api connection
-        """
-
-        if not os.path.exists(self.auth_path):
-            print('\nThe hs_utils library requires a secure connection to '
-                  'your HydroShare account.')
-            if username is None:
-                username = input('Please enter your HydroShare username: ') \
-                        .strip()
-            p = getpass.getpass('Enter the HydroShare password for user '
-                                '\'%s\': ' % username)
-            auth = HydroShareAuthBasic(username=username, password=p)
-
-            save = input('Do you want to save this password for future use?\n'
-                         'Note: the password will be stored in plain text '
-                         '(not recommended) [y/N]?')
-
-            if save.lower() == 'y':
-                self.cache = True
-            else:
-                self.cache = False
-
-            if self.cache:
-                with open(self.auth_path, 'wb') as f:
-                    pickle.dump(auth, f, protocol=2)
-
-        else:
-
-            with open(self.auth_path, 'rb') as f:
-                auth = pickle.load(f)
-
-        return auth
 
     def getResourceMetadata(self, resid):
         """Gets metadata for a specified resource.
@@ -102,9 +61,9 @@ class hydroshare():
         system_meta = self.hs.getSystemMetadata(resid)
         return resource.ResourceMetadata(system_meta, science_meta)
 
-    def createHydroShareResource(self, abstract, title, derivedFromId=None,
-                                 keywords=[], resource_type='GenericResource',
-                                 content_files=[], public=False):
+    def createResource(self, abstract, title, derivedFromId=None,
+                       keywords=[], resource_type='GenericResource',
+                       content_files=[], public=False):
         """Creates a hydroshare resource.
 
         args:
@@ -178,8 +137,7 @@ class hydroshare():
         except Exception as e:
             print(e)
 
-
-    def getResourceFromHydroShare(self, resourceid, destination='.'):
+    def getResource(self, resourceid, destination='.'):
         """Downloads content of a hydroshare resource.
 
         args:
@@ -191,7 +149,7 @@ class hydroshare():
         -- None
         """
 
-        default_dl_path =  self.download_dir
+        default_dl_path = self.download_dir
         dst = os.path.abspath(os.path.join(default_dl_path, destination))
         download = True
 
@@ -243,6 +201,7 @@ class hydroshare():
         # update the content dictionary
         self.content.update(content)
 
+
     def addContentToExistingResource(self, resid, content):
         """Adds content files to an existing hydroshare resource.
 
@@ -259,7 +218,8 @@ class hydroshare():
                                     self._addContentToExistingResource,
                                     resid, content)
 
-    def loadResource(self, resourceid):
+
+    def loadResourceFromLocal(self, resourceid):
         """Loads the contents of a previously downloaded resource.
 
          args:
@@ -271,18 +231,12 @@ class hydroshare():
 
         resdir = utilities.find_resource_directory(resourceid)
         if resdir is None:
-            print('<b style="color:red">Could not find any resource '
-                         'matching the id [%s].</b> <br> It is likely that '
-                         'this resource has not yet been downloaded from '
-                         'HydroShare.org, or it was removed from the '
-                         'JupyterHub server. Please use the following '
-                         'command to aquire the resource content: '
-                         '<br><br><code>hs.getResourceFromHydroShare(%s)'
-                         '</code>.' % (resourceid, resourceid))
+            print(f'Could not find any resource matching the id {resource}')
             return
 
-        # create search paths.  Need to check 2 paths due to hs_restclient bug #63.
-        search_paths = [os.path.join(resdir, '%s/data/contents/*' % resourceid), 
+        # create search paths.
+        # Need to check 2 paths due to hs_restclient bug #63.
+        search_paths = [os.path.join(resdir, f'{resourceid}/data/contents/*',
                         os.path.join(resdir, 'data/contents/*')]
 
         content = {}
@@ -291,16 +245,15 @@ class hydroshare():
             content_files = glob.glob(p)
             if len(content_files) > 0:
                 found_content = True
-                print('<p>Downloaded content is located at: %s</p>' % resdir)
-                print('<p>Found %d content file(s). \n</p>'
-                             % len(content_files))
+                print(f'Downloaded content is located at: {resdir}')
+                print(f'Found {len(content_files)} content file(s)')
             for f in content_files:
                 fname = os.path.basename(f)
                 content[fname] = f
         if len(content.keys()) == 0:
-            print('<p>Did not find any content files for resource id: %s</p>' % resourceid)
+            print('Did not find any content files for resource id: '
+                  '{resourceid}')
 
-        utilities.display_resource_content_files(content)
         self.content = content
 
     def getContentFiles(self, resourceid):
