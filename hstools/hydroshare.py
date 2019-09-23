@@ -12,62 +12,36 @@ import shutil
 from . import threads
 from . import resource
 from . import utilities
+from . import auth
 from .compat import *
 
-                
+
 class hydroshare():
-    def __init__(self, username=None, password=None, cache=False):
+    def __init__(self, save_dir=None):
+
+        """
+        save_dir is the location that data will hs resources will be saved.
+        """
+
         self.hs = None
         self.content = {}
 
-        # connect to hydroshare using OAUTH2
-        authfile = os.path.expanduser("~/.hs_auth")
-        if os.path.exists(authfile):
-            with open(authfile, 'rb') as f:
-                token, cid = pickle.load(f)
-            auth = HydroShareAuthOAuth2(cid, '', token=token)
-        else:
-            # connect to hydroshare using Basic Authentication
-            self.cache = cache
-            notebook_home = os.environ.get('NOTEBOOK_HOME', '.')
-            if cache:
-                utilities.load_environment(os.path.join(
-                                           notebook_home,
-                                           '.env'))
-            self.auth_path = os.path.join(notebook_home, '.auth')
+        # get the download directory from ENV_VAR or input
+        self.download_dir = save_dir if save_dir is not None else \
+        os.environ.get('JUPYTER_DOWNLOADS', '.')
+        if not os.path.exists(self.download_dir):
+            raise Exception("HS resource download directory does not exist! "
+                            "Set this using the 'save_dir' input argument or "
+                            "the JUPYTER_DOWNLOADS environment variable")
 
-            uname = username
-            if uname is None:
-                uname = os.environ.get('HS_USR_NAME', None)
+        # try to login via oauth
+        if self.hs is None:
+            self.hs = auth.oauth2_authorization()
 
-            if password is None:
-                # get a secure connection to hydroshare
-                auth = self.getSecureConnection(uname)
-            else:
-                print('WARNING: THIS IS NOT A SECURE METHOD OF CONNECTING TO '
-                      'HYDROSHARE...AVOID TYPING CREDENTIALS AS PLAIN TEXT')
-                auth = HydroShareAuthBasic(username=uname, password=password)
+        # try to login via basic auth
+        if self.hs is None:
+            self.hs = auth.basic_authorization()
 
-        try:
-            self.hs = HydroShare(auth=auth)
-            self.hs.getUserInfo()
-            print('Successfully established a connection with HydroShare')
-
-        except HydroShareHTTPException as e:
-            print('Failed to establish a connection with HydroShare.\n  '
-                  'Please check that you provided the correct credentials.\n'
-                  '%s' % e)
-            # remove the cached authentication
-            if os.path.exists(self.auth_path):
-                os.remove(self.auth_path)
-            return None
-
-        # set the HS resource download directory
-        download_dir = os.environ.get('JUPYTER_DOWNLOADS', 'hs_downloads')
-        if not os.path.isdir(download_dir):
-            print('Creating a directory to store your HS downloads')
-            os.makedirs(download_dir)
-        self.download_dir = download_dir
 
     def _addContentToExistingResource(self, resid, content_files):
         for f in content_files:
