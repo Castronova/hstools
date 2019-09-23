@@ -10,6 +10,8 @@ from datetime import datetime as dt
 import pickle
 import shutil
 
+import zipfile
+
 from . import threads
 from . import resource
 from . import utilities
@@ -137,69 +139,60 @@ class hydroshare():
         except Exception as e:
             print(e)
 
-    def getResource(self, resourceid, destination='.'):
+    def getResource(self, resourceid):
         """Downloads content of a hydroshare resource.
 
         args:
         -- resourceid: id of the hydroshare resource (str)
-        -- destination: path to save resource, default
-                        /user/[username]/notebooks/data (str)
 
         returns:
         -- None
         """
 
-        default_dl_path = self.download_dir
-        dst = os.path.abspath(os.path.join(default_dl_path, destination))
-        download = True
+        dst = self.download_dir
 
-        # check if the data should be overwritten
-        dst_res_folder = os.path.join(dst, resourceid)
-        if os.path.exists(dst_res_folder):
-            print('This resource already exists in your userspace.')
-            utilities.tree(dst_res_folder)
-            res = input('\nDo you want to overwrite these data [Y/n]? ')
-            if res != 'n':
-                shutil.rmtree(dst_res_folder)
-            else:
-                download = False
+        try:
 
-        # re-download the content if desired
-        if download:
-            try:
+            # download the resource (threaded)
+            threads.runThreadedFunction('Downloading Resource',
+                                        'Download Finished',
+                                        self.hs.getResource,
+                                        resourceid,
+                                        destination=dst,
+                                        unzip=False)
 
-                # download the resource (threaded)
-                threads.runThreadedFunction('Downloading Resource',
-                                            'Download Finished',
-                                            self.hs.getResource,
-                                            resourceid,
-                                            destination=dst,
-                                            unzip=True)
+            print('Successfully downloaded resource %s' % resourceid)
 
-                print('Successfully downloaded resource %s' % resourceid)
+        except Exception as e:
+            print('Failed to retrieve '
+                  'resource content from HydroShare: %s' % e)
+            return None
 
-            except Exception as e:
-                print('Failed to retrieve '
-                      'resource content from HydroShare: %s' % e)
-                return None
+        archive = f'{os.path.join(dst, resourceid)}.zip'
+        with zipfile.ZipFile(archive, 'r') as zip_ref:
+            zip_ref.extractall(f'{os.path.join(dst)}')
+            os.remove(archive)
 
-        # load the resource content
-        outdir = os.path.join(dst, '%s/%s' % (resourceid, resourceid))
-        content_files = glob.glob(os.path.join(outdir, 'data/contents/*'))
+        return os.path.join(dst, resourceid)
 
-        content = {}
-        for f in content_files:
-            fname = os.path.basename(f)
-
-            # trim the base name relative to the data directory
-            dest_folder_name = os.path.dirname(destination).split('/')[-1]
-            f = os.path.join(dest_folder_name,
-                             os.path.relpath(f, dest_folder_name))
-
-            content[fname] = f
-
-        # update the content dictionary
-        self.content.update(content)
+## todo: move loading data into its own function
+#        # load the resource content
+#        outdir = os.path.join(dst, '%s/%s' % (resourceid, resourceid))
+#        content_files = glob.glob(os.path.join(outdir, 'data/contents/*'))
+#
+#        content = {}
+#        for f in content_files:
+#            fname = os.path.basename(f)
+#
+#            # trim the base name relative to the data directory
+#            dest_folder_name = os.path.dirname(destination).split('/')[-1]
+#            f = os.path.join(dest_folder_name,
+#                             os.path.relpath(f, dest_folder_name))
+#
+#            content[fname] = f
+#
+#        # update the content dictionary
+#        self.content.update(content)
 
 
     def addContentToExistingResource(self, resid, content):
@@ -236,7 +229,7 @@ class hydroshare():
 
         # create search paths.
         # Need to check 2 paths due to hs_restclient bug #63.
-        search_paths = [os.path.join(resdir, f'{resourceid}/data/contents/*',
+        search_paths = [os.path.join(resdir, f'{resourceid}/data/contents/*'),
                         os.path.join(resdir, 'data/contents/*')]
 
         content = {}

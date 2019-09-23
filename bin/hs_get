@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import shutil
+import argparse
+from hstools import hydroshare
+
+
+def get_resource(hs, resid, force=False):
+
+    # remove old data it force
+    if force:
+        opath = os.path.join(hs.save_dir, resid)
+        if os.path.exists(opath):
+            shutil.rmtree(opath)
+
+    return hs.getResource(resid)
+
+if __name__ == '__main__':
+
+    desc = """CLI for retrieving resources from the HydroShare
+           platform.
+           """
+    parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument('-r', '--resource-id', required=True,
+                         help='unique identifier of the HydroShare resource '
+                              'to download')
+    parser.add_argument('-d', '--save-dir', default='.',
+                        help='location to save resources downloaded from '
+                             'HydroShare.org')
+    parser.add_argument('-f', default=False, action='store_true',
+                        help='force replace HydroShare resource if it '
+                             'already exists')
+
+    args = parser.parse_args()
+
+    # create output directory if it doesn't already exist
+    try:
+        if not os.path.exists(args.save_dir):
+            os.makedirs(args.save_dir)
+    except Exception as e:
+        raise Exception(f'Could not create output directory: {e}')
+        sys.exit(1)
+    
+    # connect to hydroshare
+    hs = hydroshare.hydroshare(save_dir=args.save_dir)
+    if hs is None:
+        sys.exit(1)
+
+    # get the hydroshare data
+    resource_path = get_resource(hs, args.resource_id, args.f)
+
+    # return the path to the data
+    print(f'{resource_path}')
+
+
+
+

@@ -80,10 +80,5 @@ class TestDownload(unittest.TestCase):
         shutil.rmtree(d)
 
 
-
-
-
-
-
 if __name__ == '__main__':
     unittest.main()
