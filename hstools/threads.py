@@ -33,7 +33,7 @@ class threadWrapper(object):
         return results
 
     def isAlive(self):
-        return self.thread.isAlive()
+        return self.thread.is_alive()
 
     def join(self):
         self.thread.join()
