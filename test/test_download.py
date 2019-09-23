@@ -59,6 +59,27 @@ class TestDownload(unittest.TestCase):
         hs.hs.session.close()
         os.rmdir(d)
 
+    def test_get_file(self):
+
+        # create a temp dir
+        d = os.path.join(os.path.dirname(__file__),
+                         'test_directory_please_remove')
+        os.makedirs(d)
+
+        # instantiate HS
+        hs = hydroshare.hydroshare(save_dir=d)
+        self.assertTrue(hs.download_dir == d)
+
+        # download a published resource
+        resid = '1be4d7902c87481d85b93daad99cf471'
+        hs.getResourceFromHydroShare(resid)
+        self.assertTrue(os.path.exists(os.path.join(d, f'{resid}')))
+
+        # clean up
+        hs.hs.session.close()
+        shutil.rmtree(d)
+
+
 
 
 

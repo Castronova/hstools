@@ -1,4 +1,5 @@
-# coding: utf-8
+#!/usr/bin/env python3
+
 from __future__ import print_function
 import os
 import getpass
@@ -220,8 +221,8 @@ class hydroshare():
                 print('Successfully downloaded resource %s' % resourceid)
 
             except Exception as e:
-                print('<b style="color:red">Failed to retrieve '
-                             'resource content from HydroShare: %s</b>' % e)
+                print('Failed to retrieve '
+                      'resource content from HydroShare: %s' % e)
                 return None
 
         # load the resource content
@@ -238,9 +239,6 @@ class hydroshare():
                              os.path.relpath(f, dest_folder_name))
 
             content[fname] = f
-
-        # show the resource content files
-        utilities.display_resource_content_files(content)
 
         # update the content dictionary
         self.content.update(content)
