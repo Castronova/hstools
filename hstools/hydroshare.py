@@ -63,24 +63,24 @@ class hydroshare():
         system_meta = self.hs.getSystemMetadata(resid)
         return resource.ResourceMetadata(system_meta, science_meta)
 
-    def createResource(self, abstract, title, derivedFromId=None,
+    def createResource(self, abstract, title,
                        keywords=[], resource_type='GenericResource',
-                       content_files=[], public=False):
+                       content_files=[]):
         """Creates a hydroshare resource.
 
         args:
         -- abstract: abstract for resource (str, required)
         -- title: title of resource (str, required)
-        -- derivedFromId: id of parent hydroshare resource (str, default=>None)
         -- keywords: list of subject keywords (list, default=>[])
         -- resource_type: type of resource to create (str, default=>
                                                      'GenericResource')
         -- content_files: data to save as resource content (list, default=>[])
-        -- public: resource sharing status (bool, default=>False)
 
         returns:
-        -- None
+        -- resource_id
         """
+
+        resid = None
 
         # query the hydroshare resource types and make sure that
         # resource_type is valid
@@ -88,32 +88,9 @@ class hydroshare():
         try:
             res_type = restypes[resource_type]
         except KeyError:
-            print('<b style="color:red;">[%s] is not a valid '
-                         'HydroShare resource type.</p>' % resource_type)
+            print('%s is not a valid '
+                  'HydroShare resource type.</p>' % resource_type)
             return None
-
-        # get the 'derived resource' metadata
-        if derivedFromId is not None:
-            try:
-                # update the abstract and keyword metadata
-                meta = self.getResourceMetadata(derivedFromId)
-
-                abstract = meta.abstract \
-                    + '\n\n[Modified in JupyterHub on %s]\n%s' \
-                    % (dt.now(), abstract)
-
-                keywords = set(keywords + meta.keywords)
-            except:
-                print('<b style="color:red;">Encountered an error '
-                             ' while setting the derivedFrom relationship '
-                             ' using id=%s. Make sure this resource is '
-                             ' is accessible to your account. '
-                             % derivedFromId)
-                print('<a href=%s target="_blank">%s<a>' %
-                             ('https://www.hydroshare.org/resource/%s'
-                              % derivedFromId, 'View the "DerivedFrom" '
-                              'Resource'))
-                return None
 
         f = None if len(content_files) == 0 else content_files[0]
 
@@ -127,17 +104,14 @@ class hydroshare():
                                             resource_file=f,
                                             keywords=keywords)
 
-        print('Resource id: %s' % resid)
-        print('<a href=%s target="_blank">%s<a>' %
-                     ('https://www.hydroshare.org/resource/%s'
-                      % resid, 'Open Resource in HydroShare'))
-
         # add the remaining content files to the hs resource
         try:
             if len(content_files) > 1:
                 self.addContentToExistingResource(resid, content_files[1:])
         except Exception as e:
             print(e)
+
+        return resid
 
     def getResource(self, resourceid):
         """Downloads content of a hydroshare resource.

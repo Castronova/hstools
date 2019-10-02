@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import shutil
+import argparse
+from hstools import hydroshare
+
+
+def create_resource(hs, abstract, title,
+                    derivedFromID=None,
+                    keywords=[],
+                    content_files=[],
+                    public=False):
+
+    return hs.createResource(abstract,
+                             title,
+                             derivedFromId=derivedFromID,
+                             keywords=keywords,
+                             resource_type='compositeresource',
+                             content_files=content_files,
+                             public=public)
+
+if __name__ == '__main__':
+
+    desc = """CLI for retrieving resources from the HydroShare
+           platform.
+           """
+    parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument('-a', '--abstract', required=True,
+                         type=str, nargs='+',
+                         help='resource description')
+    parser.add_argument('-t', '--title', required=True,
+                        type=str, nargs='+',
+                        help='resource title')
+    parser.add_argument('-k', '--keywords', type=str, nargs='+', default=[],
+                        help='space separated list of keywords')
+    parser.add_argument('-f', '--files', type=str, nargs='+', default=[],
+                        help='space separated list of files')
+
+    args = parser.parse_args()
+
+    title = ' '.join(args.title)
+    abstract = ' '.join(args.abstract)
+
+    # make sure input files exist
+    for f in args.files:
+        if not os.path.exists(f):
+            raise Exception(f'Could not find file: {f}')
+            sys.exit(1)
+
+    # connect to hydroshare
+    hs = hydroshare.hydroshare()
+    if hs is None:
+        raise Exception(f'Connection to HydroShare failed')
+        sys.exit(1)
+
+    # get the hydroshare data
+    resource_id = create_resource(hs,
+                                  abstract,
+                                  title,
+                                  keywords=args.keywords,
+                                  content_files=args.files)
+
+    # return the path to the data
+    print(f'\nhttps://hydroshare.org/resource/{resource_id}')
+
+
+
+
