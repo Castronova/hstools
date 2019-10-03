@@ -42,11 +42,20 @@ class hydroshare():
 
         # try to login via oauth
         if self.hs is None:
-            self.hs = auth.oauth2_authorization(authfile)
+            try:
+                self.hs = auth.oauth2_authorization(authfile)
+            except Exception:
+                pass
 
         # try to login via basic auth
         if self.hs is None:
-            self.hs = auth.basic_authorization(auth_location)
+            try:
+                self.hs = auth.basic_authorization(authfile)
+            except Exception:
+                pass
+        
+        if self.hs is None:
+            raise Exception(f'Authentication failed using: {authfile}')
 
     def close(self):
         """
@@ -73,7 +82,7 @@ class hydroshare():
         return resource.ResourceMetadata(system_meta, science_meta)
 
     def createResource(self, abstract, title,
-                       keywords=[], resource_type='compositeresource',
+                       keywords=[],
                        content_files=[]):
         """Creates a hydroshare resource.
 
@@ -81,8 +90,6 @@ class hydroshare():
         -- abstract: abstract for resource (str, required)
         -- title: title of resource (str, required)
         -- keywords: list of subject keywords (list, default=>[])
-        -- resource_type: type of resource to create (str, default=>
-                                                     'GenericResource')
         -- content_files: data to save as resource content (list, default=>[])
 
         returns:
@@ -94,18 +101,7 @@ class hydroshare():
             if not os.path.exists(f):
                 raise Exception(f'Could not find file: {f}')
 
-
         resid = None
-
-        # query the hydroshare resource types and make sure that
-        # resource_type is valid
-        restypes = {r.lower(): r for r in self.hs.getResourceTypes()}
-        try:
-            res_type = restypes[resource_type]
-        except KeyError:
-            print('%s is not a valid '
-                  'HydroShare resource type.</p>' % resource_type)
-            return None
 
         f = None if len(content_files) == 0 else content_files[0]
 
@@ -113,7 +109,7 @@ class hydroshare():
         resid = threads.runThreadedFunction('Creating HydroShare Resource',
                                             'Resource Created Successfully',
                                             self.hs.createResource,
-                                            resource_type=res_type,
+                                            'CompositeResource',
                                             title=title,
                                             abstract=abstract,
                                             resource_file=f,
