@@ -1,0 +1,73 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import json
+import shutil
+import argparse
+from getpass import getpass
+from hstools import hydroshare
+
+
+def init(loc='~'):
+   
+    fp = os.path.expanduser(os.path.join(loc, '.hs_auth'))
+    if os.path.exists(fp):
+        print(f'Auth already exists: {fp}')
+        remove = input('Do you want to replace it [Y/n]')
+        if remove.lower() == 'n':
+            sys.exit(0)
+        os.remove(fp)
+
+    usr = input('Enter HydroShare Username: ')
+    pwd = getpass('Enter HydroShare Password: ')
+
+    dat = {'usr': usr,
+           'pwd': pwd}
+
+    with open(fp, 'w') as f:
+        f.write(json.dumps(dat))
+
+    try:
+        hs = hydroshare.hydroshare(authfile=fp)
+    except Exception:
+        print('Authentication Failed')
+        os.remove(fp)
+        sys.exit(1)
+    
+    print(f'Auth saved to: {fp}')
+
+
+if __name__ == '__main__':
+
+    desc = """CLI for retrieving resources from the HydroShare
+           platform.
+           """
+    parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument('-d', '--dir', default='~',
+                        help='location to save authentication directory ')
+
+    args = parser.parse_args()
+
+    # create output directory if it doesn't already exist
+    try:
+        if not os.path.exists(args.dir):
+            os.makedirs(args.dir)
+    except Exception as e:
+        raise Exception(f'Could not save creds to directory {args.dir}: {e}')
+        sys.exit(1)
+   
+    # initialize 
+    init(loc=args.dir)
+
+    # connect to hydroshare
+#
+#    # get the hydroshare data
+#    resource_path = get_resource(hs, args.resource_id, args.f)
+#
+#    # return the path to the data
+#    print(f'{resource_path}')
+
+
+
+

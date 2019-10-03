@@ -19,6 +19,8 @@ def basic_authorization(authfile='~/.hs_auth_basic'):
     Returns hs_restclient instance or None
     """
 
+    authfile = os.path.expanduser(authfile)
+
     # exit if this file doesn't exist
     if not os.path.exists(authfile):
         raise Exception(f'Could not find authentication file '
@@ -46,6 +48,8 @@ def oauth2_authorization(authfile='~/..hs_auth'):
 
     Returns hs_restclient instance or None
     """
+
+    authfile = os.path.expanduser(authfile)
 
     # exit if this file doesn't exist
     if not os.path.exists(authfile):

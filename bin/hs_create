@@ -9,7 +9,7 @@ from hstools import hydroshare
 
 def create_resource(hs, abstract, title,
                     keywords=[],
-                    content_files=[])
+                    content_files=[]):
 
     return hs.createResource(abstract,
                              title,

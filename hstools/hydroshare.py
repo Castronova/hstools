@@ -28,6 +28,7 @@ class hydroshare():
 
         self.hs = None
         self.content = {}
+        self.authfile = os.path.expanduser(authfile)
 
         # get the download directory from ENV_VAR or input
         if save_dir is not None:
@@ -43,19 +44,19 @@ class hydroshare():
         # try to login via oauth
         if self.hs is None:
             try:
-                self.hs = auth.oauth2_authorization(authfile)
+                self.hs = auth.oauth2_authorization(self.authfile)
             except Exception:
                 pass
 
         # try to login via basic auth
         if self.hs is None:
             try:
-                self.hs = auth.basic_authorization(authfile)
+                self.hs = auth.basic_authorization(self.authfile)
             except Exception:
                 pass
         
         if self.hs is None:
-            raise Exception(f'Authentication failed using: {authfile}')
+            raise Exception(f'Authentication failed using: {self.authfile}')
 
     def close(self):
         """
