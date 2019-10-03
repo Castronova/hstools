@@ -6,7 +6,7 @@ import pickle
 import hs_restclient
 
 
-def basic_authorization():
+def basic_authorization(authfile='~/.hs_auth_basic'):
     """
     performs basic HS authorization using username and password stored in
     ~/.hs_auth_basic file in the following format:
@@ -18,13 +18,11 @@ def basic_authorization():
 
     Returns hs_restclient instance or None
     """
-    
-    # get the authorization file for the default path
-    authfile = os.path.expanduser("~/.hs_auth_basic")
 
     # exit if this file doesn't exist
     if not os.path.exists(authfile):
-        return None
+        raise Exception(f'Could not find authentication file '
+                        f'[.hs_auth] at {authfile}')
 
     try:
         with open(authfile, 'r') as f:
@@ -35,13 +33,13 @@ def basic_authorization():
             hs.getUserInfo()
             return hs
     except Exception as e:
-        print(e)
+        raise Exception(e)
 
     # authorization failed
     return None
 
 
-def oauth2_authorization():
+def oauth2_authorization(authfile='~/..hs_auth'):
     """
     performs HS authorization using OAuth2 credentials stored in
     ~/.hs_auth file, in a pickled binary format.
@@ -49,12 +47,10 @@ def oauth2_authorization():
     Returns hs_restclient instance or None
     """
 
-    # get the authorization file for the default path
-    authfile = os.path.expanduser("~/.hs_auth")
-
     # exit if this file doesn't exist
     if not os.path.exists(authfile):
-        return None
+        raise Exception(f'Could not find authentication file '
+                        f'[.hs_auth] at {authfile}')
 
     try:
         with open(authfile, 'rb') as f:
@@ -64,7 +60,7 @@ def oauth2_authorization():
             hs.getUserInfo()
             return hs
     except Exception as e:
-        print(e)
+        raise Exception(e)
 
     # authorization failed
     return None

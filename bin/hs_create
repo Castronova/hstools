@@ -8,18 +8,14 @@ from hstools import hydroshare
 
 
 def create_resource(hs, abstract, title,
-                    derivedFromID=None,
                     keywords=[],
-                    content_files=[],
-                    public=False):
+                    content_files=[])
 
     return hs.createResource(abstract,
                              title,
-                             derivedFromId=derivedFromID,
                              keywords=keywords,
                              resource_type='compositeresource',
-                             content_files=content_files,
-                             public=public)
+                             content_files=content_files)
 
 if __name__ == '__main__':
 

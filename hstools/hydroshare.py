@@ -20,7 +20,7 @@ from .compat import *
 
 
 class hydroshare():
-    def __init__(self, save_dir=None):
+    def __init__(self, save_dir=None, authfile='~/.hs_auth'):
 
         """
         save_dir is the location that data will hs resources will be saved.
@@ -30,8 +30,11 @@ class hydroshare():
         self.content = {}
 
         # get the download directory from ENV_VAR or input
-        self.download_dir = save_dir if save_dir is not None else \
-        os.environ.get('JUPYTER_DOWNLOADS', '.')
+        if save_dir is not None:
+            self.download_dir = save_dir
+        else:
+            self.download_dir = os.environ.get('JUPYTER_DOWNLOADS', '.')
+
         if not os.path.exists(self.download_dir):
             raise Exception("HS resource download directory does not exist! "
                             "Set this using the 'save_dir' input argument or "
@@ -39,11 +42,17 @@ class hydroshare():
 
         # try to login via oauth
         if self.hs is None:
-            self.hs = auth.oauth2_authorization()
+            self.hs = auth.oauth2_authorization(authfile)
 
         # try to login via basic auth
         if self.hs is None:
-            self.hs = auth.basic_authorization()
+            self.hs = auth.basic_authorization(auth_location)
+
+    def close(self):
+        """
+        closes the connection to HydroShare
+        """
+        self.hs.session.close()
 
     def _addContentToExistingResource(self, resid, content_files):
         for f in content_files:
@@ -64,7 +73,7 @@ class hydroshare():
         return resource.ResourceMetadata(system_meta, science_meta)
 
     def createResource(self, abstract, title,
-                       keywords=[], resource_type='GenericResource',
+                       keywords=[], resource_type='compositeresource',
                        content_files=[]):
         """Creates a hydroshare resource.
 
@@ -79,6 +88,12 @@ class hydroshare():
         returns:
         -- resource_id
         """
+
+        # make sure input files exist before doing anything else
+        for f in content_files:
+            if not os.path.exists(f):
+                raise Exception(f'Could not find file: {f}')
+
 
         resid = None
 
