@@ -161,25 +161,19 @@ class hydroshare():
 
         return os.path.join(dst, resourceid)
 
-## todo: move loading data into its own function
-#        # load the resource content
-#        outdir = os.path.join(dst, '%s/%s' % (resourceid, resourceid))
-#        content_files = glob.glob(os.path.join(outdir, 'data/contents/*'))
-#
-#        content = {}
-#        for f in content_files:
-#            fname = os.path.basename(f)
-#
-#            # trim the base name relative to the data directory
-#            dest_folder_name = os.path.dirname(destination).split('/')[-1]
-#            f = os.path.join(dest_folder_name,
-#                             os.path.relpath(f, dest_folder_name))
-#
-#            content[fname] = f
-#
-#        # update the content dictionary
-#        self.content.update(content)
+    def getResourceFiles(self, resid):
+        """
+        returns a list of files in a hydroshare resource
+        """
+        try:
+            response = self.hs.resource(resid).files.all()
+        except Exception:
+            raise Exception(f'Failed to get list of files for resouce {resid}')
 
+        dat = response.json()
+        if 'results' in dat.keys():
+            return dat['results']
+        return []
 
     def addContentToExistingResource(self, resid, content):
         """Adds content files to an existing hydroshare resource.
@@ -192,10 +186,29 @@ class hydroshare():
         -- None
         """
 
-        threads.runThreadedFunction('Adding Content to Resource',
-                                    'Successfully Added Content Files',
-                                    self._addContentToExistingResource,
-                                    resid, content)
+        if not isinstance(content, list):
+            raise Exception('content must be provided as list')
+            
+        # make sure input files exist
+        for f in content:
+            if not os.path.exists(f):
+                raise Exception(f'Could not find file: {f}')
+
+        # make sure these files don't already exist in the resource
+        filenames = [r['file_name'] for r in self.getResourceFiles(resid)]
+        for f in content:
+            if f in filenames:
+                raise Exception(f'File already exists in resource: {f}')
+    
+        for f in content:
+            print(f'+ adding: {f}')
+            self.hs.addResourceFile(resid, f)
+
+#        threads.runThreadedFunction('Adding Content to Resource',
+#                                    'Successfully Added Content Files',
+#                                    self._addContentToExistingResource,
+#                                    resid, content)
+        return resid
 
 
     def loadResourceFromLocal(self, resourceid):
@@ -235,30 +248,30 @@ class hydroshare():
 
         self.content = content
 
-    def getContentFiles(self, resourceid):
-        """Gets the content files for a resource that exists on the
-           Jupyter Server
-
-        args:
-        -- resourceid: the id of the hydroshare resource
-
-        returns:
-        -- {content file name: path}
-        """
-
-        content = utilities.get_hs_content(resourceid)
-        return content
-
-    def getContentPath(self, resourceid):
-        """Gets the server path of a resources content files.
-
-        args:
-        -- resourceid: the id of the hydroshare resource
-
-        returns:
-        -- server path the the resource content files
-        """
-
-        path = utilities.find_resource_directory(resourceid)
-        if path is not None:
-            return os.path.join(path, resourceid, 'data/contents')
+#    def getContentFiles(self, resourceid):
+#        """Gets the content files for a resource that exists on the
+#           Jupyter Server
+#
+#        args:
+#        -- resourceid: the id of the hydroshare resource
+#
+#        returns:
+#        -- {content file name: path}
+#        """
+#
+#        content = utilities.get_hs_content(resourceid)
+#        return content
+#
+#    def getContentPath(self, resourceid):
+#        """Gets the server path of a resources content files.
+#
+#        args:
+#        -- resourceid: the id of the hydroshare resource
+#
+#        returns:
+#        -- server path the the resource content files
+#        """
+#
+#        path = utilities.find_resource_directory(resourceid)
+#        if path is not None:
+#            return os.path.join(path, resourceid, 'data/contents')
