@@ -54,7 +54,7 @@ class hydroshare():
                 self.hs = auth.basic_authorization(self.authfile)
             except Exception:
                 pass
-        
+
         if self.hs is None:
             raise Exception(f'Authentication failed using: {self.authfile}')
 
@@ -63,10 +63,6 @@ class hydroshare():
         closes the connection to HydroShare
         """
         self.hs.session.close()
-
-    def _addContentToExistingResource(self, resid, content_files):
-        for f in content_files:
-            self.hs.addResourceFile(resid, f)
 
     def getResourceMetadata(self, resid):
         """Gets metadata for a specified resource.
@@ -106,15 +102,12 @@ class hydroshare():
 
         f = None if len(content_files) == 0 else content_files[0]
 
-        # create the hs resource (1 content file allowed)
-        resid = threads.runThreadedFunction('Creating HydroShare Resource',
-                                            'Resource Created Successfully',
-                                            self.hs.createResource,
-                                            'CompositeResource',
-                                            title=title,
-                                            abstract=abstract,
-                                            resource_file=f,
-                                            keywords=keywords)
+        print(f'+ creating resource')
+        self.hs.createResource('CompositeResource',
+                               title=title,
+                               abstract=abstract,
+                               resource_file=f,
+                               keywords=keywords)
 
         # add the remaining content files to the hs resource
         try:
@@ -138,14 +131,10 @@ class hydroshare():
         dst = self.download_dir
 
         try:
-
-            # download the resource (threaded)
-            threads.runThreadedFunction('Downloading Resource',
-                                        'Download Finished',
-                                        self.hs.getResource,
-                                        resourceid,
-                                        destination=dst,
-                                        unzip=False)
+            print(f'+ downloading resource: {resourceid}')
+            self.hs.getResource(resourceid,
+                                destination=dst,
+                                unzip=False)
 
             print('Successfully downloaded resource %s' % resourceid)
 
@@ -188,7 +177,7 @@ class hydroshare():
 
         if not isinstance(content, list):
             raise Exception('content must be provided as list')
-            
+
         # make sure input files exist
         for f in content:
             if not os.path.exists(f):
@@ -199,17 +188,12 @@ class hydroshare():
         for f in content:
             if f in filenames:
                 raise Exception(f'File already exists in resource: {f}')
-    
+
         for f in content:
             print(f'+ adding: {f}')
             self.hs.addResourceFile(resid, f)
 
-#        threads.runThreadedFunction('Adding Content to Resource',
-#                                    'Successfully Added Content Files',
-#                                    self._addContentToExistingResource,
-#                                    resid, content)
         return resid
-
 
     def loadResourceFromLocal(self, resourceid):
         """Loads the contents of a previously downloaded resource.
