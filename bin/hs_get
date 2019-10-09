@@ -23,7 +23,7 @@ if __name__ == '__main__':
            platform.
            """
     parser = argparse.ArgumentParser(description=desc)
-    parser.add_argument('-r', '--resource-id', required=True,
+    parser.add_argument('resource-id',
                          help='unique identifier of the HydroShare resource '
                               'to download')
     parser.add_argument('-d', '--save-dir', default='.',

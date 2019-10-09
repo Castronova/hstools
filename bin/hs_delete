@@ -17,7 +17,7 @@ if __name__ == '__main__':
     desc = """Delete an existing HydroShare resource
            """
     parser = argparse.ArgumentParser(description=desc)
-    parser.add_argument('resource_id',
+    parser.add_argument('resource-id',
                          type=str,
                          help='unique HydroShare resource identifier to be ' +
                               'deleted')
