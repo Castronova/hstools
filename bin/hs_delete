@@ -18,9 +18,10 @@ if __name__ == '__main__':
            """
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument('resource_id',
-                         type=str,
-                         help='unique HydroShare resource identifier to be ' +
-                              'deleted')
+                        nargs='+',
+                        type=str,
+                        help='unique HydroShare resource identifier to be ' +
+                             'deleted')
     args = parser.parse_args()
 
     # connect to hydroshare
@@ -29,7 +30,8 @@ if __name__ == '__main__':
         raise Exception(f'Connection to HydroShare failed')
         sys.exit(1)
 
-    try:
-        delete_resource(hs, args.resource_id)
-    except Exception as e:
-        print(f'  {str(e)}')
+    for resid in args.resource_id:
+        try:
+            delete_resource(hs, resid)
+        except Exception as e:
+            print(f'  {str(e)}')
