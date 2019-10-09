@@ -76,9 +76,10 @@ class hydroshare():
 
         try:
             self.hs.deleteResource(resid)
-        except Exception:
-            print(f'- failed to delete resource: {resid}')
-            return False
+            print(f'+ successfully removed resource: {resid}')
+        except Exception as e:
+            print(f'- failed to remove resource: {resid}')
+            raise Exception(e)
 
         return True
 

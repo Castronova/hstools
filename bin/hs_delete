@@ -7,7 +7,7 @@ import argparse
 from hstools import hydroshare
 
 
-def delete_resource(hs, resid, files):
+def delete_resource(hs, resid):
 
     return hs.deleteResource(resid)
 
@@ -17,7 +17,7 @@ if __name__ == '__main__':
     desc = """Delete an existing HydroShare resource
            """
     parser = argparse.ArgumentParser(description=desc)
-    parser.add_argument('-r', '--resid', required=True,
+    parser.add_argument('resource_id',
                          type=str,
                          help='unique HydroShare resource identifier to be ' +
                               'deleted')
@@ -28,5 +28,8 @@ if __name__ == '__main__':
     if hs is None:
         raise Exception(f'Connection to HydroShare failed')
         sys.exit(1)
-    
-    delete_resource(args.resid)
+
+    try:
+        delete_resource(hs, args.resource_id)
+    except Exception as e:
+        print(f'  {str(e)}')
