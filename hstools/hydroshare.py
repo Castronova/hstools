@@ -64,6 +64,24 @@ class hydroshare():
         """
         self.hs.session.close()
 
+    def deleteResource(self, resid):
+        """Deletes a hydroshare resource
+
+        args:
+        -- resid: hydroshare resource id
+
+        returns:
+        -- True if successful, else False
+        """
+
+        try:
+            self.hs.deleteResource(resid)
+        except Exception:
+            print(f'- failed to delete resource: {resid}')
+            return False
+
+        return True
+
     def getResourceMetadata(self, resid):
         """Gets metadata for a specified resource.
 
