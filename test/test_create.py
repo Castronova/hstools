@@ -21,7 +21,7 @@ class TestCreate(unittest.TestCase):
         # remove the test file
         os.remove(self.testfile)
 
-    def test_create_resource(self):
+    def test_no_files(self):
 
         title = 'unit testing'
         abstract = 'this is a resource created by a unittest'
@@ -40,6 +40,11 @@ class TestCreate(unittest.TestCase):
         hs.hs.deleteResource(resid)
         hs.close()
 
+    def test_file_doesnt_exist(self):
+        title = 'unit testing'
+        abstract = 'this is a resource created by a unittest'
+        keywords = ['test']
+
         # test that an exception is raised if an input file doesn't exist
         hs = hydroshare.hydroshare(authfile=self.authfile)
         with self.assertRaises(Exception):
@@ -48,6 +53,12 @@ class TestCreate(unittest.TestCase):
                                       keywords,
                                       content_files=['wrong_name.txt'])
         hs.close()
+
+    def test_one_file(self):
+
+        title = 'unit testing'
+        abstract = 'this is a resource created by a unittest'
+        keywords = ['test']
 
         # test that resource is created successfully
         hs = hydroshare.hydroshare(authfile=self.authfile)
@@ -61,27 +72,6 @@ class TestCreate(unittest.TestCase):
         self.assertTrue(type(scimeta) == ResourceMetadata)
         hs.hs.deleteResource(resid)
         hs.close()
-
-
-#    def test_get_file(self):
-#
-#        # create a temp dir
-#        d = os.path.join(os.path.dirname(__file__),
-#                         'test_directory_please_remove')
-#        os.makedirs(d)
-#
-#        # instantiate HS
-#        hs = hydroshare.hydroshare(save_dir=d)
-#        self.assertTrue(hs.download_dir == d)
-#
-#        # download a published resource
-#        resid = '1be4d7902c87481d85b93daad99cf471'
-#        hs.getResource(resid)
-#        self.assertTrue(os.path.exists(os.path.join(d, f'{resid}')))
-#
-#        # clean up
-#        hs.hs.session.close()
-#        shutil.rmtree(d)
 
 
 if __name__ == '__main__':
