@@ -122,11 +122,11 @@ class hydroshare():
         f = None if len(content_files) == 0 else content_files[0]
 
         print(f'+ creating resource')
-        self.hs.createResource('CompositeResource',
-                               title=title,
-                               abstract=abstract,
-                               resource_file=f,
-                               keywords=keywords)
+        resid = self.hs.createResource('CompositeResource',
+                                       title=title,
+                                       abstract=abstract,
+                                       resource_file=f,
+                                       keywords=keywords)
 
         # add the remaining content files to the hs resource
         try:
