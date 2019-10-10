@@ -47,12 +47,6 @@ def check_for_ipynb(content_files):
     return links
 
 
-def display_tree(resid):
-
-    # todo: display a tree view of the resource bagit, based on id
-    pass
-
-
 def display_resource_content_files(content_file_dictionary,
                                    text='Found the following content when '
                                         'parsing the HydroShare resource:'):
