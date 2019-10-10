@@ -60,14 +60,6 @@ if __name__ == '__main__':
     # initialize 
     init(loc=args.dir)
 
-    # connect to hydroshare
-#
-#    # get the hydroshare data
-#    resource_path = get_resource(hs, args.resource_id, args.f)
-#
-#    # return the path to the data
-#    print(f'{resource_path}')
-
 
 
 

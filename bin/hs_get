@@ -4,8 +4,9 @@ import os
 import sys
 import shutil
 import argparse
-from hstools import hydroshare
+from hstools import hydroshare, log
 
+logger = log.logger
 
 def get_resource(hs, resid, force=False):
 
@@ -32,8 +33,17 @@ if __name__ == '__main__':
     parser.add_argument('-f', default=False, action='store_true',
                         help='force replace HydroShare resource if it '
                              'already exists')
+    parser.add_argument('-v', default=True, action='store_true',
+                        help='verbose output')
+    parser.add_argument('-q', default=False, action='store_true',
+                        help='supress output')
 
     args = parser.parse_args()
+
+    if args.v:
+        log.set_verbose()
+    if args.q:
+        log.set_quiet()
 
     # create output directory if it doesn't already exist
     try:
@@ -50,10 +60,4 @@ if __name__ == '__main__':
 
     # get the hydroshare data
     resource_path = get_resource(hs, args.resource_id, args.f)
-
-    # return the path to the data
-    print(f'{resource_path}')
-
-
-
 

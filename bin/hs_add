@@ -4,7 +4,9 @@ import os
 import sys
 import shutil
 import argparse
-from hstools import hydroshare
+from hstools import hydroshare, log
+
+logger = log.logger
 
 
 def add_file(hs, resid, files):
@@ -27,9 +29,17 @@ if __name__ == '__main__':
     # todo: parser force overwrite files?
     parser.add_argument('--overwrite', action='store_true',
                         help='overwrite existing resource files with the same name')
+    parser.add_argument('-v', default=True, action='store_true',
+                        help='verbose output')
+    parser.add_argument('-q', default=False, action='store_true',
+                        help='supress output')
 
     args = parser.parse_args()
 
+    if args.v:
+        log.set_verbose()
+    if args.q:
+        log.set_quiet()
 
     # make sure input files exist
     for f in args.files:
@@ -64,7 +74,7 @@ if __name__ == '__main__':
             raise Exception('The following file(s) already exist in the resource. Use the --overwrite flag to replace them')
         else:
             for fc in file_conflicts:
-                print(f'- removing: {fc}')
+                logger.info(f'- removing: {fc}')
                 hs.hs.deleteResourceFile(args.resource_id, fc)
 
     resource_id = add_file(hs, args.resource_id, args.files)

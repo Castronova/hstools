@@ -4,7 +4,9 @@ import os
 import sys
 import shutil
 import argparse
-from hstools import hydroshare
+from hstools import hydroshare, log
+
+logger = log.logger
 
 
 def create_resource(hs, abstract, title,
@@ -33,8 +35,17 @@ if __name__ == '__main__':
                         help='space separated list of keywords')
     parser.add_argument('-f', '--files', type=str, nargs='+', default=[],
                         help='space separated list of files')
+    parser.add_argument('-v', default=True, action='store_true',
+                        help='verbose output')
+    parser.add_argument('-q', default=False, action='store_true',
+                        help='supress output')
 
     args = parser.parse_args()
+
+    if args.v:
+        log.set_verbose()
+    if args.q:
+        log.set_quiet()
 
     title = ' '.join(args.title)
     abstract = ' '.join(args.abstract)
@@ -59,7 +70,7 @@ if __name__ == '__main__':
                                   content_files=args.files)
 
     # return the path to the data
-    print(f'\nhttps://hydroshare.org/resource/{resource_id}')
+    logger.info(f'\nhttps://hydroshare.org/resource/{resource_id}')
 
 
 

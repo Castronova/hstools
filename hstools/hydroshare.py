@@ -16,7 +16,10 @@ from . import threads
 from . import resource
 from . import utilities
 from . import auth
+from . import log
 from .compat import *
+
+logger = log.logger
 
 
 class hydroshare():
@@ -76,9 +79,9 @@ class hydroshare():
 
         try:
             self.hs.deleteResource(resid)
-            print(f'+ successfully removed resource: {resid}')
+            logger.info(f'+ successfully removed resource: {resid}')
         except Exception as e:
-            print(f'- failed to remove resource: {resid}')
+            logger.error(f'- failed to remove resource: {resid}')
             raise Exception(e)
 
         return True
@@ -121,7 +124,7 @@ class hydroshare():
 
         f = None if len(content_files) == 0 else content_files[0]
 
-        print(f'+ creating resource')
+        logger.info(f'+ creating resource')
         resid = self.hs.createResource('CompositeResource',
                                        title=title,
                                        abstract=abstract,
@@ -133,7 +136,7 @@ class hydroshare():
             if len(content_files) > 1:
                 self.addContentToExistingResource(resid, content_files[1:])
         except Exception as e:
-            print(e)
+            logger.error(e)
 
         return resid
 
@@ -150,16 +153,16 @@ class hydroshare():
         dst = self.download_dir
 
         try:
-            print(f'+ downloading resource: {resourceid}')
+            logger.info(f'+ downloading resource: {resourceid}')
             self.hs.getResource(resourceid,
                                 destination=dst,
                                 unzip=False)
 
-            print('Successfully downloaded resource %s' % resourceid)
+            logger.info('Successfully downloaded resource %s' % resourceid)
 
         except Exception as e:
-            print('Failed to retrieve '
-                  'resource content from HydroShare: %s' % e)
+            logger.error('Failed to retrieve '
+                         'resource content from HydroShare: %s' % e)
             return None
 
         archive = f'{os.path.join(dst, resourceid)}.zip'
@@ -209,7 +212,7 @@ class hydroshare():
                 raise Exception(f'File already exists in resource: {f}')
 
         for f in content:
-            print(f'+ adding: {f}')
+            logger.info(f'+ adding: {f}')
             self.hs.addResourceFile(resid, f)
 
         return resid
@@ -226,7 +229,7 @@ class hydroshare():
 
         resdir = utilities.find_resource_directory(resourceid)
         if resdir is None:
-            print(f'Could not find any resource matching the id {resource}')
+            logger.error(f'Could not find any resource matching the id {resource}')
             return
 
         # create search paths.
@@ -240,13 +243,13 @@ class hydroshare():
             content_files = glob.glob(p)
             if len(content_files) > 0:
                 found_content = True
-                print(f'Downloaded content is located at: {resdir}')
-                print(f'Found {len(content_files)} content file(s)')
+                logger.info(f'Downloaded content is located at: {resdir}')
+                logger.info(f'Found {len(content_files)} content file(s)')
             for f in content_files:
                 fname = os.path.basename(f)
                 content[fname] = f
         if len(content.keys()) == 0:
-            print('Did not find any content files for resource id: '
+            logger.error('Did not find any content files for resource id: '
                   '{resourceid}')
 
         self.content = content
