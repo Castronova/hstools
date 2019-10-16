@@ -16,7 +16,6 @@ def create_resource(hs, abstract, title,
     return hs.createResource(abstract,
                              title,
                              keywords=keywords,
-                             resource_type='compositeresource',
                              content_files=content_files)
 
 if __name__ == '__main__':
