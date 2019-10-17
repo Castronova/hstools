@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import shutil
+import argparse
+from hstools import hydroshare
+
+
+def print_resource_list(hs, username, count=1000000, long_format=False):
+
+    # number of resource to query at a time
+    qcount = 25
+
+    cnt = 0
+    for r in hs.hs.resources(owner=userinfo['username'], count=qcount):
+        cnt += 1
+        if cnt > count:
+            return
+
+        if not long_format:
+            print(f'+ {r["resource_title"][:25]:<25} '
+                  f'{r["resource_id"]} ', flush=True)
+        else:
+            print(f'\n+ {r["resource_id"]} ')
+            print(f'   title: {r["resource_title"]}')
+            print(f'   date created: {r["date_created"]}')
+            print(f'   owner: {r["creator"]}')
+            print(f'   authors: {", ".join(r["authors"])}')
+            
+
+if __name__ == '__main__':
+
+    desc = """List HydroShare resources
+           """
+    parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument('-l', default=False, action='store_true',
+                        help='list in long format')
+    parser.add_argument('-n', default=1000000, type=int,
+                        help='number of resources to show')
+
+    args = parser.parse_args()
+    
+    # connect to hydroshare
+    hs = hydroshare.hydroshare()
+    userinfo = hs.userInfo()
+
+    print_resource_list(hs, userinfo['username'], 
+                        count=args.n, long_format=args.l)
+
+
