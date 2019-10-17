@@ -61,11 +61,18 @@ class hydroshare():
         if self.hs is None:
             raise Exception(f'Authentication failed using: {self.authfile}')
 
+        # get user info
+        self.user_info = self.hs.getUserInfo()
+
+
     def close(self):
         """
         closes the connection to HydroShare
         """
         self.hs.session.close()
+
+    def userInfo(self):
+        return self.user_info
 
     def deleteResource(self, resid):
         """Deletes a hydroshare resource

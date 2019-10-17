@@ -12,13 +12,13 @@ python setup.py install
 
 ## Connecting to HydroShare
 
-Connect to HydroShare using the `hs_init` function. This will create an authentication file for accessing HydroShare. Note, this only needs to be executed once.
+Connect to HydroShare using the `hs-init` function. This will create an authentication file for accessing HydroShare. Note, this only needs to be executed once.
 
 ```
-hs_init --help
+hs-init --help
 ```
 ```
-hs_init
+hs-init
 Enter HydroShare Username: <username>
 Enter HydroShare Password: <password>
 Auth saved to: ~/.hs_auth
@@ -26,14 +26,14 @@ Auth saved to: ~/.hs_auth
 
 ## Creating a HydroShare resource
 
-Create a new HydroShare resource using the `hs_create` command.
+Create a new HydroShare resource using the `hs-create` command.
 
 ```
-hs_create --help
+hs-create --help
 ```
 
 ```
-hs_create \
+hs-create \
 -a This is the abstract of my resource \
 -t My resource Title \
 -k keyword1 keyword2 keyword3 \
@@ -41,36 +41,62 @@ hs_create \
 ```
 
 
+## Listing HydroShare resources
+
+Listing HydroShare resource owned by you is done `hs-ls` command.
+
+```
+hs-ls --help
+```
+
+List all files owned by you in short format
+
+```
+hs-ls
+```
+
+List all files owned by you in long format
+
+```
+hs-ls -l
+```
+
+List a specific number of resources in long format
+
+```
+hs-ls -n 17 -l
+```
+
 ## Downloading HydroShare resources
 
-Downloading data from the HydroShare platform is done using globally unique identfiers (GUID). This GUIDs are defined for every HydroShare resource and can be aquired from resource URLs. The `hs_get` command downloads resource bagit file and unzips it into a directory of your choosing.
+Downloading data from the HydroShare platform is done using globally unique identfiers (GUID). This GUIDs are defined for every HydroShare resource and can be aquired from resource URLs. The `hs-get` command downloads resource bagit file and unzips it into a directory of your choosing.
 
 ```
-hs_get --help
+hs-get --help
 ```
 
 ```
-hs_get <hydroshare resource id>
+hs-get <hydroshare resource id>
 ```
 
 ## Adding files to an existing HydroShare resource
 
-Add files to an existing HydroShare resource using the `hs_add` command. This command allows you to optionally overwrite (`--overwrite`) files that already exist in a resource, which is helpful when updating content.
+Add files to an existing HydroShare resource using the `hs-add` command. This command allows you to optionally overwrite (`--overwrite`) files that already exist in a resource, which is helpful when updating content.
 
 ```
-hs_add --help
+hs-add --help
 ```
 
 ```
-hs_add <hydroshare resource id> -f my-file.txt my-other-file.txt
+hs-add <hydroshare resource id> -f my-file.txt my-other-file.txt
 ```
 
 
 ## Deleting a HydroShare resource
 
-Delete an entire HydroShare resource using the `hs_delete` command. This is useful for cleaning up your HydroShare workspace. BEWARE: THIS WILL PERMANENTLY DELETE YOUR HYDROSHARE RESOURCE DATA.
+Delete an entire HydroShare resource using the `hs-delete` command. This is useful for cleaning up your HydroShare workspace. BEWARE: THIS WILL PERMANENTLY DELETE YOUR HYDROSHARE RESOURCE DATA.
 
 ```
-hs_delete <hydroshare resource id>
+hs-delete <hydroshare resource id>
 ```
 
