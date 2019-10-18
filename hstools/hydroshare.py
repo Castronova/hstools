@@ -193,34 +193,24 @@ class hydroshare():
             return dat['results']
         return []
 
-    def addContentToExistingResource(self, resid, content):
+    def addContentToExistingResource(self, resid, source, target=None):
         """Adds content files to an existing hydroshare resource.
 
         args:
         -- resid: id of an existing hydroshare resource (str)
-        -- content: files paths to be added to resource (list)
+        -- source: file paths to be added to resource
+        -- target: target path relative to the root directory of the resource
 
         returns:
         -- None
         """
 
-        if not isinstance(content, list):
-            raise Exception('content must be provided as list')
-
         # make sure input files exist
-        for f in content:
-            if not os.path.exists(f):
-                raise Exception(f'Could not find file: {f}')
+        if not os.path.exists(source):
+            raise Exception(f'Could not find file: {f}')
 
-        # make sure these files don't already exist in the resource
-        filenames = [r['file_name'] for r in self.getResourceFiles(resid)]
-        for f in content:
-            if f in filenames:
-                raise Exception(f'File already exists in resource: {f}')
-
-        for f in content:
-            logger.info(f'+ adding: {f}')
-            self.hs.addResourceFile(resid, f)
+        logger.info(f'+ adding: {source}')
+        self.hs.addResourceFile(resid, source, target)
 
         return resid
 

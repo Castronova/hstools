@@ -9,9 +9,9 @@ from hstools import hydroshare, log
 logger = log.logger
 
 
-def add_file(hs, resid, files):
+def add_file(hs, resid, source, target):
 
-    return hs.addContentToExistingResource(resid, files)
+    return hs.addContentToExistingResource(resid, source, target=target)
 
 
 if __name__ == '__main__':
@@ -24,7 +24,12 @@ if __name__ == '__main__':
                          help='unique HydroShare resource identifier')
     parser.add_argument('-f', '--files', required=True,
                         type=str, nargs='+',
-                        help='files to add to resource')
+                        help='files to add to resource. By default all files '
+                             'will be added to the root directory of the '
+                             'resource. A specific directory can be specified '
+                             'relative to the root directory using the '
+                             'following syntax - <target-file>:<resource-path>.'
+                        )
 
     # todo: parser force overwrite files?
     parser.add_argument('--overwrite', action='store_true',
@@ -41,32 +46,61 @@ if __name__ == '__main__':
     if args.q:
         log.set_quiet()
 
-    # make sure input files exist
-    for f in args.files:
-        if not os.path.exists(f):
-            raise Exception(f'Could not find file: {f}')
-            sys.exit(1)
 
     # connect to hydroshare
     hs = hydroshare.hydroshare()
     if hs is None:
         raise Exception(f'Connection to HydroShare failed')
         sys.exit(1)
-        
+    
+    # separate the file source and target paths
+    sources = []
+    targets = []
+    for f in args.files:
+        if ':' in f:
+            src, tar = f.split(':')
+
+            # get just the filename
+            src_filename = os.path.basename(src)
+
+            # make sure the target doesn't contain a beginning 
+            # or trailing slash
+            tar = tar.strip('/')
+
+#            if src != tar.split('/')[-1]:
+#                tar = os.path.join(tar, src_filename)
+        else:
+            src = f
+            tar = os.path.basename(src)
+
+        sources.append(src)
+        targets.append(tar)
+
+    # make sure input files exist
+    for f in sources:
+        if not os.path.exists(f):
+            raise Exception(f'Could not find file: {f}')
+            sys.exit(1)
+
+    # get the resource files    
     try:
         response = hs.getResourceFiles(args.resource_id)
         res_files = []
         if len(response) > 0:
-            res_files =  [r['file_name'] for r in response]
+            for r in response:
+                # get the filepath from the content url field
+                file_path = r['url'].split('contents')[-1]
+                # remove slash at beginning
+                file_path = file_path[1:] if file_path[0] == '/' else file_path
+                res_files.append(file_path)
     except Exception:
         raise Exception('Error connecting to HydroShare resource')
-
-    # make sure files don't already exist
-    fnames = [os.path.basename(f) for f in args.files]
+    
+    # make sure files don't already exist in the resource
     file_conflicts = []
     if len(res_files) > 0:
         for rf in res_files:
-            if rf in fnames:
+            if rf in targets:
                 file_conflicts.append(rf)
 
     if len(file_conflicts) > 0:
@@ -77,5 +111,10 @@ if __name__ == '__main__':
                 logger.info(f'- removing: {fc}')
                 hs.hs.deleteResourceFile(args.resource_id, fc)
 
-    resource_id = add_file(hs, args.resource_id, args.files)
-
+    # loop through the files and add each individually
+    for i in range(0, len(sources)):
+        try:
+            resource_id = add_file(hs, args.resource_id,
+                                   sources[i], targets[i])
+        except Exception as e:
+            print(f'- failed to add file {sources[i]}')
