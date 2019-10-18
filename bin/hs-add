@@ -28,7 +28,7 @@ if __name__ == '__main__':
                              'will be added to the root directory of the '
                              'resource. A specific directory can be specified '
                              'relative to the root directory using the '
-                             'following syntax - <target-file>:<resource-path>.'
+                             'following syntax - <source-path>:<target-path>.'
                         )
 
     # todo: parser force overwrite files?
@@ -37,7 +37,7 @@ if __name__ == '__main__':
     parser.add_argument('-v', default=True, action='store_true',
                         help='verbose output')
     parser.add_argument('-q', default=False, action='store_true',
-                        help='supress output')
+                        help='silent output')
 
     args = parser.parse_args()
 
@@ -105,11 +105,31 @@ if __name__ == '__main__':
 
     if len(file_conflicts) > 0:
         if not args.overwrite:
-            raise Exception('The following file(s) already exist in the resource. Use the --overwrite flag to replace them')
+            print('The following file(s) already exist in the resource.\nUse the --overwrite flag to replace the file(s).')
+            for fc in file_conflicts:
+                print(f' - {fc} (already exists)')
+            sys.exit(1)
         else:
             for fc in file_conflicts:
                 logger.info(f'- removing: {fc}')
                 hs.hs.deleteResourceFile(args.resource_id, fc)
+
+    # create folders if necessary
+    res_dirs = [os.path.dirname(p) for p in res_files]
+    for i in range(0, len(targets)):
+        target_path = os.path.dirname(targets[i])
+        if target_path not in res_dirs:
+            print(f'+ creating resource directory: {target_path}')
+
+            # need a try/except loop here because hs.getResourceFiles will
+            # not return empty directories. There is a chance that the 
+            # target directory already exists on HS but is empty
+            try:
+                hs.hs.createResourceFolder(args.resource_id,
+                                           pathname=target_path)
+            except Exception:
+                pass
+        
 
     # loop through the files and add each individually
     for i in range(0, len(sources)):
@@ -117,4 +137,4 @@ if __name__ == '__main__':
             resource_id = add_file(hs, args.resource_id,
                                    sources[i], targets[i])
         except Exception as e:
-            print(f'- failed to add file {sources[i]}')
+            print(f'- failed to add file {sources[i]:targets[i]}')

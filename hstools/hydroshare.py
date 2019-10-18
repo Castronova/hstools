@@ -209,7 +209,7 @@ class hydroshare():
         if not os.path.exists(source):
             raise Exception(f'Could not find file: {f}')
 
-        logger.info(f'+ adding: {source}')
+        logger.info(f'+ adding: {source} -> {target}')
         self.hs.addResourceFile(resid, source, target)
 
         return resid
