@@ -9,9 +9,9 @@ from getpass import getpass
 from hstools import hydroshare
 
 
-def init(loc='~'):
+def init(loc='.'):
    
-    fp = os.path.expanduser(os.path.join(loc, '.hs_auth'))
+    fp = os.path.join(loc, '.hs_auth')
     if os.path.exists(fp):
         print(f'Auth already exists: {fp}')
         remove = input('Do you want to replace it [Y/n]')
@@ -50,15 +50,16 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # create output directory if it doesn't already exist
+    dir = os.path.expanduser(args.dir)
     try:
-        if not os.path.exists(args.dir):
-            os.makedirs(args.dir)
+        if not os.path.exists(dir):
+            os.makedirs(dir)
     except Exception as e:
         raise Exception(f'Could not save creds to directory {args.dir}: {e}')
         sys.exit(1)
    
     # initialize 
-    init(loc=args.dir)
+    init(loc=dir)
 
 
 
