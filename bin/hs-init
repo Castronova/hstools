@@ -4,6 +4,7 @@ import os
 import sys
 import json
 import shutil
+import base64
 import argparse
 from getpass import getpass
 from hstools import hydroshare
@@ -11,7 +12,7 @@ from hstools import hydroshare
 
 def init(loc='.'):
    
-    fp = os.path.join(loc, '.hs_auth')
+    fp = os.path.abspath(os.path.join(loc, '.hs_auth'))
     if os.path.exists(fp):
         print(f'Auth already exists: {fp}')
         remove = input('Do you want to replace it [Y/n]')
@@ -24,9 +25,11 @@ def init(loc='.'):
 
     dat = {'usr': usr,
            'pwd': pwd}
-
+    cred_json_string = str.encode(json.dumps(dat))
+    cred_encoded = base64.b64encode(cred_json_string)
     with open(fp, 'w') as f:
-        f.write(json.dumps(dat))
+        f.write(cred_encoded.decode('utf-8'))
+#        f.write(json.dumps(dat))
 
     try:
         hs = hydroshare.hydroshare(authfile=fp)

@@ -2,6 +2,7 @@
 
 import os
 import json
+import base64
 import pickle
 import hs_restclient
 
@@ -9,7 +10,7 @@ import hs_restclient
 def basic_authorization(authfile='~/.hs_auth_basic'):
     """
     performs basic HS authorization using username and password stored in
-    ~/.hs_auth_basic file in the following format:
+    ~/.hs_auth_basic file in the following format (b64 encoded):
 
     {
         "usr": "<username>"
@@ -28,7 +29,9 @@ def basic_authorization(authfile='~/.hs_auth_basic'):
 
     try:
         with open(authfile, 'r') as f:
-            creds = json.load(f)
+            txt = f.read()
+            d = base64.b64decode(txt)
+            creds = json.loads(d.decode())
             a = hs_restclient.HydroShareAuthBasic(username=creds['usr'],
                                                   password=creds['pwd'])
             hs = hs_restclient.HydroShare(auth=a)
@@ -41,7 +44,7 @@ def basic_authorization(authfile='~/.hs_auth_basic'):
     return None
 
 
-def oauth2_authorization(authfile='~/..hs_auth'):
+def oauth2_authorization(authfile='~/.hs_auth'):
     """
     performs HS authorization using OAuth2 credentials stored in
     ~/.hs_auth file, in a pickled binary format.
