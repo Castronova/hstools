@@ -4,16 +4,41 @@ import os
 import sys
 import shutil
 import argparse
+from enum import Enum
 from hstools import hydroshare
 
+class Filters(Enum):
+    CREATOR = "creator"
+    USER = "user"
+    OWNER = "owner"
+    AUTHOR = "author"
+    GROUP = "group"
+    TEXT = "full_text_search"
+    PUBLISHED = "published"
+    EDITABLE = "edit_permission"
+    PUBLIC = "public"
+   
+def parse_filter(filter_str):
 
-def print_resource_list(hs, username, count=1000000, long_format=False):
+    try:
+        f, v = filter_str.split('=')
+        filter_keyword = getattr(Filters, f.upper()).value
+        return {filter_keyword: v}
+    except Exception:
+        print(f'- invalid filter: {filter_str}')
+        return None
+
+def print_resource_list(hs, username, filter_dict={}, 
+                        count=1000000, long_format=False):
 
     # number of resource to query at a time
     qcount = 25
 
+    kwargs = {'owner': username,
+              'count': qcount}
+    kwargs.update(filter_dict)
     cnt = 0
-    for r in hs.hs.resources(owner=userinfo['username'], count=qcount):
+    for r in hs.hs.resources(**kwargs):
         cnt += 1
         if cnt > count:
             return
@@ -38,14 +63,32 @@ if __name__ == '__main__':
                         help='list in long format')
     parser.add_argument('-n', default=1000000, type=int,
                         help='number of resources to show')
+    parser.add_argument('-filter', nargs='*',
+                        help='filter resource by metadata attribute, e.g ' 
+                        'owner=<USERNAME> author=<USERNAME> '
+                        'text=<FULL TEXT>. Multiple filters can be applied ' 
+                        'at once by space separating them. Available filters '
+                        'are: CREATOR, USER, OWNER, AUTHOR, GROUP, TEXT, '
+                        'PUBLISHED, EDITABLE, PUBLIC')
 
     args = parser.parse_args()
-    
+
+    # check filter
+    filters = {}
+    if args.filter:
+        for f in args.filter:
+            pf = parse_filter(f)
+            if pf is not None:
+                filters.update(pf)
+            else:
+                sys.exit(1)
+
+
     # connect to hydroshare
     hs = hydroshare.hydroshare()
     userinfo = hs.userInfo()
 
-    print_resource_list(hs, userinfo['username'], 
+    print_resource_list(hs, userinfo['username'], filter_dict=filters,
                         count=args.n, long_format=args.l)
 
 
