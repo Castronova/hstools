@@ -105,10 +105,12 @@ if __name__ == '__main__':
 
     if len(file_conflicts) > 0:
         if not args.overwrite:
-            print('The following file(s) already exist in the resource.\nUse the --overwrite flag to replace the file(s).')
             for fc in file_conflicts:
-                print(f' - {fc} (already exists)')
-            sys.exit(1)
+                print(f' - {fc} already exists, use --overwrite to replace')
+                res_files.pop(res_files.index(fc))
+                tidx = targets.index(fc)
+                sources.pop(tidx)
+                targets.pop(tidk)
         else:
             for fc in file_conflicts:
                 logger.info(f'- removing: {fc}')
@@ -130,7 +132,6 @@ if __name__ == '__main__':
             except Exception:
                 pass
         
-
     # loop through the files and add each individually
     for i in range(0, len(sources)):
         try:
