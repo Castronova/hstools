@@ -110,7 +110,7 @@ if __name__ == '__main__':
                 res_files.pop(res_files.index(fc))
                 tidx = targets.index(fc)
                 sources.pop(tidx)
-                targets.pop(tidk)
+                targets.pop(tidx)
         else:
             for fc in file_conflicts:
                 logger.info(f'- removing: {fc}')
