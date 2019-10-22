@@ -24,12 +24,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=required,
     py_modules=['hstools'],
-    scripts=['bin/hs-init',
-             'bin/hs-get',
-             'bin/hs-create',
-             'bin/hs-delete',
-             'bin/hs-add',
-             'bin/hs-ls'],
+    scripts=['bin/hs'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
