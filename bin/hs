@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+
+
+import argparse
+from hstools.funcs import add, get, create, delete, ls, init
+
+
+if __name__ == '__main__':
+    
+    desc = ''
+    parser = argparse.ArgumentParser(description=desc)
+    sub = parser.add_subparsers(help='commands')
+
+    # hs get
+    hs_get = sub.add_parser('get')
+    get.add_arguments(hs_get)
+    hs_get.set_defaults(func=get.main)
+
+
+    # hs add
+    hs_add = sub.add_parser('add')
+    add.add_arguments(hs_add)
+    hs_add.set_defaults(func=add.main)
+
+    # hs create
+    hs_create = sub.add_parser('create')
+    create.add_arguments(hs_create)
+    hs_create.set_defaults(func=create.main)
+    
+    # hs delete
+    hs_delete = sub.add_parser('delete')
+    delete.add_arguments(hs_delete)
+    hs_delete.set_defaults(func=delete.main)
+    
+    # hs list
+    hs_ls = sub.add_parser('ls')
+    ls.add_arguments(hs_ls)
+    hs_ls.set_defaults(func=ls.main)
+
+    # hs initialize
+    hs_init = sub.add_parser('init')
+    init.add_arguments(hs_init)
+    hs_init.set_defaults(func=init.main)
+
+    args = parser.parse_args()
+
+    # print help if sub-parser was not provided
+    if not getattr(args, 'func', 0):
+        parser.print_help()
+    else:
+        args.func(args)
+
+

@@ -18,15 +18,12 @@ def create_resource(hs, abstract, title,
                              keywords=keywords,
                              content_files=content_files)
 
-if __name__ == '__main__':
 
-    desc = """CLI for retrieving resources from the HydroShare
-           platform.
-           """
-    parser = argparse.ArgumentParser(description=desc)
+def add_arguments(parser):
+
     parser.add_argument('-a', '--abstract', required=True,
-                         type=str, nargs='+',
-                         help='resource description')
+                        type=str, nargs='+',
+                        help='resource description')
     parser.add_argument('-t', '--title', required=True,
                         type=str, nargs='+',
                         help='resource title')
@@ -39,7 +36,8 @@ if __name__ == '__main__':
     parser.add_argument('-q', default=False, action='store_true',
                         help='supress output')
 
-    args = parser.parse_args()
+
+def main(args):
 
     if args.v:
         log.set_verbose()
@@ -72,5 +70,11 @@ if __name__ == '__main__':
     logger.info(f'\nhttps://hydroshare.org/resource/{resource_id}')
 
 
+if __name__ == '__main__':
 
-
+    desc = """CLI for retrieving resources from the HydroShare
+           platform.
+           """
+    parser = argparse.ArgumentParser(description=desc)
+    args = parser.parse_args()
+    main(args)

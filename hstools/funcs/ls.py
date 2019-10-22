@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
-import os
 import sys
-import shutil
 import argparse
 from enum import Enum
 from hstools import hydroshare
+
 
 class Filters(Enum):
     CREATOR = "creator"
@@ -17,7 +16,8 @@ class Filters(Enum):
     PUBLISHED = "published"
     EDITABLE = "edit_permission"
     PUBLIC = "public"
-   
+
+
 def parse_filter(filter_str):
 
     try:
@@ -28,7 +28,8 @@ def parse_filter(filter_str):
         print(f'- invalid filter: {filter_str}')
         return None
 
-def print_resource_list(hs, username, filter_dict={}, 
+
+def print_resource_list(hs, username, filter_dict={},
                         count=1000000, long_format=False):
 
     # number of resource to query at a time
@@ -52,26 +53,24 @@ def print_resource_list(hs, username, filter_dict={},
             print(f'   date created: {r["date_created"]}')
             print(f'   owner: {r["creator"]}')
             print(f'   authors: {", ".join(r["authors"])}')
-            
 
-if __name__ == '__main__':
 
-    desc = """List HydroShare resources
-           """
-    parser = argparse.ArgumentParser(description=desc)
+def add_arguments(parser):
+
     parser.add_argument('-l', default=False, action='store_true',
                         help='list in long format')
     parser.add_argument('-n', default=1000000, type=int,
                         help='number of resources to show')
     parser.add_argument('-filter', nargs='*',
-                        help='filter resource by metadata attribute, e.g ' 
+                        help='filter resource by metadata attribute, e.g '
                         'owner=<USERNAME> author=<USERNAME> '
-                        'text=<FULL TEXT>. Multiple filters can be applied ' 
+                        'text=<FULL TEXT>. Multiple filters can be applied '
                         'at once by space separating them. Available filters '
                         'are: CREATOR, USER, OWNER, AUTHOR, GROUP, TEXT, '
                         'PUBLISHED, EDITABLE, PUBLIC')
 
-    args = parser.parse_args()
+
+def main(args):
 
     # check filter
     filters = {}
@@ -92,3 +91,10 @@ if __name__ == '__main__':
                         count=args.n, long_format=args.l)
 
 
+if __name__ == '__main__':
+
+    desc = """List HydroShare resources
+           """
+    parser = argparse.ArgumentParser(description=desc)
+    args = parser.parse_args()
+    main(args)

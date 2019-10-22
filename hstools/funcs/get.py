@@ -18,12 +18,8 @@ def get_resource(hs, resid, force=False):
 
     return hs.getResource(resid)
 
-if __name__ == '__main__':
+def add_arguments(parser):
 
-    desc = """CLI for retrieving resources from the HydroShare
-           platform.
-           """
-    parser = argparse.ArgumentParser(description=desc)
     parser.add_argument('resource_id',
                          help='unique identifier of the HydroShare resource '
                               'to download')
@@ -38,7 +34,8 @@ if __name__ == '__main__':
     parser.add_argument('-q', default=False, action='store_true',
                         help='supress output')
 
-    args = parser.parse_args()
+
+def main(args):
 
     if args.v:
         log.set_verbose()
@@ -52,12 +49,24 @@ if __name__ == '__main__':
     except Exception as e:
         raise Exception(f'Could not create output directory: {e}')
         sys.exit(1)
-    
+
     # connect to hydroshare
     hs = hydroshare.hydroshare(save_dir=args.save_dir)
     if hs is None:
         sys.exit(1)
 
     # get the hydroshare data
-    resource_path = get_resource(hs, args.resource_id, args.f)
+    get_resource(hs, args.resource_id, args.f)
+
+
+if __name__ == '__main__':
+
+    desc = """CLI for retrieving resources from the HydroShare
+           platform.
+           """
+    parser = argparse.ArgumentParser(description=desc)
+    parser = add_arguments(parser)
+
+    args = parser.parse_args()
+    main(args)
 

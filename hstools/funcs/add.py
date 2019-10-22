@@ -13,12 +13,8 @@ def add_file(hs, resid, source, target):
 
     return hs.addContentToExistingResource(resid, source, target=target)
 
+def add_arguments(parser):
 
-if __name__ == '__main__':
-
-    desc = """Add files to an existing HydroShare resource
-           """
-    parser = argparse.ArgumentParser(description=desc)
     parser.add_argument('resource_id', 
                          type=str,
                          help='unique HydroShare resource identifier')
@@ -39,7 +35,8 @@ if __name__ == '__main__':
     parser.add_argument('-q', default=False, action='store_true',
                         help='silent output')
 
-    args = parser.parse_args()
+
+def main(args):
 
     if args.v:
         log.set_verbose()
@@ -139,3 +136,14 @@ if __name__ == '__main__':
                                    sources[i], targets[i])
         except Exception as e:
             print(f'- failed to add file {sources[i]:targets[i]}')
+
+
+if __name__ == '__main__':
+    desc = """Add files to an existing HydroShare resource"""
+    parser = argparse.ArgumentParser(description=desc)
+    parser = add_arguments(parser)
+
+    args = parser.parse_args()
+    main(args)
+    
+
