@@ -14,6 +14,8 @@ def delete_resource(hs, resid):
 
 
 def add_arguments(parser):
+
+    parser.description = long_help()
     parser.add_argument('resource_id',
                         nargs='+',
                         type=str,
@@ -45,10 +47,21 @@ def main(args):
             print(f'  {str(e)}')
 
 
+def short_help():
+    return """Delete a HydroShare resource"""
+
+
+def long_help():
+    return """Delete HydroShare resource using a globally unique identifier.
+              The identifier is provided as part of the HydroShare resource
+              URL. WARNING: This action is permanent and cannot be undone.
+           """
+
+
 if __name__ == '__main__':
 
-    desc = """Delete an existing HydroShare resource
-           """
-    parser = argparse.ArgumentParser(description=desc)
+    parser = argparse.ArgumentParser(description=long_help())
+    add_arguments(parser)
+
     args = parser.parse_args()
     main(args)

@@ -41,6 +41,7 @@ def init(loc='.'):
 
 def add_arguments(parser):
 
+    parser.description = long_help()
     parser.add_argument('-d', '--dir', default='~',
                         help='location to save authentication directory ')
 
@@ -60,11 +61,21 @@ def main(args):
     init(loc=dir)
 
 
+def short_help():
+    return 'Initialize a connection with HydroShare'
+
+
+def long_help():
+    return """Initialize a connection with HydroShare using basic
+              username:password authentication. By default, credentials are
+              stored in the $HOME directory in .hs_auth. All other hstools
+              use this authentication to connect with HydroShare."""
+
+
 if __name__ == '__main__':
 
-    desc = """CLI for retrieving resources from the HydroShare
-           platform.
-           """
-    parser = argparse.ArgumentParser(description=desc)
+    parser = argparse.ArgumentParser(description=long_help)
+    add_arguments(parser)
+
     args = parser.parse_args()
     main(args)

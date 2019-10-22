@@ -15,9 +15,10 @@ def add_file(hs, resid, source, target):
 
 def add_arguments(parser):
 
-    parser.add_argument('resource_id', 
-                         type=str,
-                         help='unique HydroShare resource identifier')
+    parser.description = long_help()
+    parser.add_argument('resource_id',
+                        type=str,
+                        help='unique HydroShare resource identifier')
     parser.add_argument('-f', '--files', required=True,
                         type=str, nargs='+',
                         help='files to add to resource. By default all files '
@@ -26,10 +27,9 @@ def add_arguments(parser):
                              'relative to the root directory using the '
                              'following syntax - <source-path>:<target-path>.'
                         )
-
-    # todo: parser force overwrite files?
     parser.add_argument('--overwrite', action='store_true',
-                        help='overwrite existing resource files with the same name')
+                        help='overwrite existing resource files with the'
+                             'same name')
     parser.add_argument('-v', default=True, action='store_true',
                         help='verbose output')
     parser.add_argument('-q', default=False, action='store_true',
@@ -43,13 +43,12 @@ def main(args):
     if args.q:
         log.set_quiet()
 
-
     # connect to hydroshare
     hs = hydroshare.hydroshare()
     if hs is None:
         raise Exception(f'Connection to HydroShare failed')
         sys.exit(1)
-    
+
     # separate the file source and target paths
     sources = []
     targets = []
@@ -57,15 +56,10 @@ def main(args):
         if ':' in f:
             src, tar = f.split(':')
 
-            # get just the filename
-            src_filename = os.path.basename(src)
-
-            # make sure the target doesn't contain a beginning 
+            # make sure the target doesn't contain a beginning
             # or trailing slash
             tar = tar.strip('/')
 
-#            if src != tar.split('/')[-1]:
-#                tar = os.path.join(tar, src_filename)
         else:
             src = f
             tar = os.path.basename(src)
@@ -79,7 +73,7 @@ def main(args):
             raise Exception(f'Could not find file: {f}')
             sys.exit(1)
 
-    # get the resource files    
+    # get the resource files
     try:
         response = hs.getResourceFiles(args.resource_id)
         res_files = []
@@ -92,7 +86,7 @@ def main(args):
                 res_files.append(file_path)
     except Exception:
         raise Exception('Error connecting to HydroShare resource')
-    
+
     # make sure files don't already exist in the resource
     file_conflicts = []
     if len(res_files) > 0:
@@ -121,29 +115,38 @@ def main(args):
             print(f'+ creating resource directory: {target_path}')
 
             # need a try/except loop here because hs.getResourceFiles will
-            # not return empty directories. There is a chance that the 
+            # not return empty directories. There is a chance that the
             # target directory already exists on HS but is empty
             try:
                 hs.hs.createResourceFolder(args.resource_id,
                                            pathname=target_path)
             except Exception:
                 pass
-        
+
     # loop through the files and add each individually
     for i in range(0, len(sources)):
         try:
-            resource_id = add_file(hs, args.resource_id,
-                                   sources[i], targets[i])
-        except Exception as e:
+            add_file(hs, args.resource_id,
+                     sources[i], targets[i])
+        except Exception:
             print(f'- failed to add file {sources[i]:targets[i]}')
 
 
+def short_help():
+    return 'Add files to an existing HydroShare resource'
+
+
+def long_help():
+    return """Add files to an existing HydroShare resource. Multiple files
+              can be added at once and folders are created as necessary.
+              By default existing files will not be replaced, use the
+              --overwrite option if this is desired.
+            """
+
+
 if __name__ == '__main__':
-    desc = """Add files to an existing HydroShare resource"""
-    parser = argparse.ArgumentParser(description=desc)
-    parser = add_arguments(parser)
+    parser = argparse.ArgumentParser(description=long_help())
+    add_arguments(parser)
 
     args = parser.parse_args()
     main(args)
-    
-

@@ -57,6 +57,7 @@ def print_resource_list(hs, username, filter_dict={},
 
 def add_arguments(parser):
 
+    parser.description = long_help()
     parser.add_argument('-l', default=False, action='store_true',
                         help='list in long format')
     parser.add_argument('-n', default=1000000, type=int,
@@ -82,7 +83,6 @@ def main(args):
             else:
                 sys.exit(1)
 
-
     # connect to hydroshare
     hs = hydroshare.hydroshare()
     userinfo = hs.userInfo()
@@ -91,10 +91,25 @@ def main(args):
                         count=args.n, long_format=args.l)
 
 
+def short_help():
+    return 'List HydroShare resources that you own'
+
+
+def long_help():
+    return """List HydroShare resources that you own. Filters can be applied
+              to limit which resources will be returned. For additional
+              resource details, use the "-l" flag to print extra metadata. By
+              default, all resources owned by the authenticated user will be
+              returned, this can be limited using the "-n" flag.
+           """
+
+
 if __name__ == '__main__':
 
     desc = """List HydroShare resources
            """
     parser = argparse.ArgumentParser(description=desc)
+    add_arguments(parser)
+
     args = parser.parse_args()
     main(args)

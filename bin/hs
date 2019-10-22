@@ -7,38 +7,41 @@ from hstools.funcs import add, get, create, delete, ls, init
 
 if __name__ == '__main__':
     
-    desc = ''
+    desc = """
+    HSTools is a humble collection of tools for interacting with data in the
+    HydroShare repository. It wraps the HydroShare REST API to provide
+    simple commands for working with resources.
+    """
     parser = argparse.ArgumentParser(description=desc)
-    sub = parser.add_subparsers(help='commands')
+    sub = parser.add_subparsers()
 
     # hs get
-    hs_get = sub.add_parser('get')
+    hs_get = sub.add_parser('get', help = get.short_help())
     get.add_arguments(hs_get)
     hs_get.set_defaults(func=get.main)
 
-
     # hs add
-    hs_add = sub.add_parser('add')
+    hs_add = sub.add_parser('add', help = add.short_help())
     add.add_arguments(hs_add)
     hs_add.set_defaults(func=add.main)
 
     # hs create
-    hs_create = sub.add_parser('create')
+    hs_create = sub.add_parser('create', help = create.short_help())
     create.add_arguments(hs_create)
     hs_create.set_defaults(func=create.main)
     
     # hs delete
-    hs_delete = sub.add_parser('delete')
+    hs_delete = sub.add_parser('delete', help = delete.short_help())
     delete.add_arguments(hs_delete)
     hs_delete.set_defaults(func=delete.main)
     
     # hs list
-    hs_ls = sub.add_parser('ls')
+    hs_ls = sub.add_parser('ls', help = ls.short_help())
     ls.add_arguments(hs_ls)
     hs_ls.set_defaults(func=ls.main)
 
     # hs initialize
-    hs_init = sub.add_parser('init')
+    hs_init = sub.add_parser('init', help = init.short_help())
     init.add_arguments(hs_init)
     hs_init.set_defaults(func=init.main)
 

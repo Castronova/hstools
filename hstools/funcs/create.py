@@ -21,6 +21,7 @@ def create_resource(hs, abstract, title,
 
 def add_arguments(parser):
 
+    parser.description = long_help()
     parser.add_argument('-a', '--abstract', required=True,
                         type=str, nargs='+',
                         help='resource description')
@@ -34,7 +35,7 @@ def add_arguments(parser):
     parser.add_argument('-v', default=True, action='store_true',
                         help='verbose output')
     parser.add_argument('-q', default=False, action='store_true',
-                        help='supress output')
+                        help='suppress output')
 
 
 def main(args):
@@ -70,11 +71,19 @@ def main(args):
     logger.info(f'\nhttps://hydroshare.org/resource/{resource_id}')
 
 
+def short_help():
+    return 'Create a new HydroShare resource'
+
+
+def long_help():
+    return 'Create a new HydroShare resource'
+
+
 if __name__ == '__main__':
 
     desc = """CLI for retrieving resources from the HydroShare
            platform.
            """
-    parser = argparse.ArgumentParser(description=desc)
+    parser = argparse.ArgumentParser(description=long_help())
     args = parser.parse_args()
     main(args)
