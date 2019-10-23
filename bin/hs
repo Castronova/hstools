@@ -12,6 +12,17 @@ def print_usage(args):
     else:
         return 'hs'
 
+def set_usage(parser):
+
+    options = []
+    for k, v in parser._subparsers._actions[1].choices.items():
+        options.append(k)
+    
+    parser.usage = '%(prog)s {' \
+                   f'{", ".join(options)}' \
+                   '} [-h, --help]'
+
+
 if __name__ == '__main__':
     
     desc = """
@@ -56,7 +67,10 @@ if __name__ == '__main__':
     init.add_arguments(hs_init)
     hs_init.set_defaults(func=init.main)
 
+    set_usage(parser)
+
     args = parser.parse_args()
+
 
     # print help if sub-parser was not provided
     if not getattr(args, 'func', 0):
