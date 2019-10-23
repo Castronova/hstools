@@ -44,6 +44,25 @@ def add_arguments(parser):
     parser.description = long_help()
     parser.add_argument('-d', '--dir', default='~',
                         help='location to save authentication directory ')
+    set_usage(parser)
+
+
+def set_usage(parser):
+
+    optionals = []
+    for option in parser._get_optional_actions():
+        if len(option.option_strings) > 0:
+            ostring = f'[{option.option_strings[0]}]'
+            if '--' in ostring:
+                # place '--' args at end of usage
+                optionals.append(ostring)
+            else:
+                optionals.insert(0, ostring)
+
+    positionals = []
+    for pos in parser._get_positional_actions():
+        positionals.append(pos.dest)
+    parser.usage = f'%(prog)s {" ".join(positionals)} {" ".join(optionals)}'
 
 
 def main(args):

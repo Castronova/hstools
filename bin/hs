@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
 
 
+import sys
 import argparse
 from hstools.funcs import add, get, create, delete, ls, init
 
+def print_usage(args):
+
+    if len(args) == 0:
+        pass
+    else:
+        return 'hs'
 
 if __name__ == '__main__':
     
@@ -12,7 +19,11 @@ if __name__ == '__main__':
     HydroShare repository. It wraps the HydroShare REST API to provide
     simple commands for working with resources.
     """
+
+    argv = sys.argv[1:]
     parser = argparse.ArgumentParser(description=desc)
+    parser.usage = print_usage(argv)
+
     sub = parser.add_subparsers()
 
     # hs get

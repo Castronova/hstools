@@ -55,6 +55,24 @@ def print_resource_list(hs, username, filter_dict={},
             print(f'   authors: {", ".join(r["authors"])}')
 
 
+def set_usage(parser):
+
+    optionals = []
+    for option in parser._get_optional_actions():
+        if len(option.option_strings) > 0:
+            ostring = f'[{option.option_strings[0]}]'
+            if '--' in ostring:
+                # place '--' args at end of usage
+                optionals.append(ostring)
+            else:
+                optionals.insert(0, ostring)
+
+    positionals = []
+    for pos in parser._get_positional_actions():
+        positionals.append(pos.dest)
+    parser.usage = f'%(prog)s {" ".join(positionals)} {" ".join(optionals)}'
+
+
 def add_arguments(parser):
 
     parser.description = long_help()
@@ -69,6 +87,7 @@ def add_arguments(parser):
                         'at once by space separating them. Available filters '
                         'are: CREATOR, USER, OWNER, AUTHOR, GROUP, TEXT, '
                         'PUBLISHED, EDITABLE, PUBLIC')
+    set_usage(parser)
 
 
 def main(args):

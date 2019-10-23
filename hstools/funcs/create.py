@@ -2,7 +2,6 @@
 
 import os
 import sys
-import shutil
 import argparse
 from hstools import hydroshare, log
 
@@ -17,6 +16,24 @@ def create_resource(hs, abstract, title,
                              title,
                              keywords=keywords,
                              content_files=content_files)
+
+
+def set_usage(parser):
+
+    optionals = []
+    for option in parser._get_optional_actions():
+        if len(option.option_strings) > 0:
+            ostring = f'[{option.option_strings[0]}]'
+            if '--' in ostring:
+                # place '--' args at end of usage
+                optionals.append(ostring)
+            else:
+                optionals.insert(0, ostring)
+
+    positionals = []
+    for pos in parser._get_positional_actions():
+        positionals.append(pos.dest)
+    parser.usage = f'%(prog)s {" ".join(positionals)} {" ".join(optionals)}'
 
 
 def add_arguments(parser):
@@ -36,6 +53,7 @@ def add_arguments(parser):
                         help='verbose output')
     parser.add_argument('-q', default=False, action='store_true',
                         help='suppress output')
+    set_usage(parser)
 
 
 def main(args):

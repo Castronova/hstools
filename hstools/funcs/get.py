@@ -8,6 +8,7 @@ from hstools import hydroshare, log
 
 logger = log.logger
 
+
 def get_resource(hs, resid, force=False):
 
     # remove old data it force
@@ -18,12 +19,31 @@ def get_resource(hs, resid, force=False):
 
     return hs.getResource(resid)
 
+
+def set_usage(parser):
+
+    optionals = []
+    for option in parser._get_optional_actions():
+        if len(option.option_strings) > 0:
+            ostring = f'[{option.option_strings[0]}]'
+            if '--' in ostring:
+                # place '--' args at end of usage
+                optionals.append(ostring)
+            else:
+                optionals.insert(0, ostring)
+
+    positionals = []
+    for pos in parser._get_positional_actions():
+        positionals.append(pos.dest)
+    parser.usage = f'%(prog)s {" ".join(positionals)} {" ".join(optionals)}'
+
+
 def add_arguments(parser):
 
     parser.description = long_help()
     parser.add_argument('resource_id',
-                         help='unique identifier of the HydroShare resource '
-                              'to download')
+                        help='unique identifier of the HydroShare resource '
+                             'to download')
     parser.add_argument('-d', '--save-dir', default='.',
                         help='location to save resources downloaded from '
                              'HydroShare.org')
@@ -34,6 +54,8 @@ def add_arguments(parser):
                         help='verbose output')
     parser.add_argument('-q', default=False, action='store_true',
                         help='supress output')
+
+    set_usage(parser)
 
 
 def short_help():
