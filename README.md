@@ -28,7 +28,7 @@ positional arguments:
     add                 Add files to an existing HydroShare resource
     create              Create a new HydroShare resource
     delete              Delete a HydroShare resource
-    ls                  List HydroShare resources that you own
+    list                List HydroShare resources that you own
     init                Initialize a connection with HydroShare
 
 optional arguments:
@@ -68,25 +68,25 @@ Listing HydroShare resources using the `ls` options.
 
 
 ```
-$ hs ls
+$ hs list
 ```
 
 List files in long format
 
 ```
-$ hs ls -l
+$ hs list -l
 ```
 
 List the first 17 resources in long format
 
 ```
-$ hs ls -l -n 17
+$ hs list -l -n 17
 ```
 
 Filter resources by published
 
 ```
-$ hs ls -filter published=true
+$ hs list -filter published=true
 ```
 
 ## Download a HydroShare Resource
