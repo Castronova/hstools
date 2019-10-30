@@ -58,7 +58,7 @@ if __name__ == '__main__':
     hs_delete.set_defaults(func=delete.main)
     
     # hs list
-    hs_ls = sub.add_parser('ls', help = ls.short_help())
+    hs_ls = sub.add_parser('list', help = ls.short_help())
     ls.add_arguments(hs_ls)
     hs_ls.set_defaults(func=ls.main)
 
