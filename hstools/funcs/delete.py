@@ -12,14 +12,24 @@ def delete_resource(hs, resid):
     return hs.deleteResource(resid)
 
 
+def delete_file(hs, resid, filename):
+
+    return hs.deleteResourceFile(resid, filename)
+
+
 def add_arguments(parser):
 
     parser.description = long_help()
     parser.add_argument('resource_id',
-                        nargs='+',
                         type=str,
                         help='unique HydroShare resource identifier to be ' +
                              'deleted')
+    parser.add_argument('-a', default=False, action='store_true',
+                        help='delete entire resource and all files')
+    parser.add_argument('-f', '--files', required=False,
+                        type=str, nargs='+',
+                        help='files to add to remove from resource. Files must be contain path relative to the resource root directory.'
+                        )
     parser.add_argument('-v', default=True, action='store_true',
                         help='verbose output')
     parser.add_argument('-q', default=False, action='store_true',
@@ -52,17 +62,28 @@ def main(args):
     if args.q:
         log.set_quiet()
 
+    if not (args.f and args.a):
+        print('Must indicate that either the entire resource or the specific files that will be removed, -a or -f. Exiting.')
+        sys.exit(0)
+
     # connect to hydroshare
     hs = hydroshare.hydroshare()
     if hs is None:
         raise Exception(f'Connection to HydroShare failed')
         sys.exit(1)
 
-    for resid in args.resource_id:
+    if args.a:
         try:
-            delete_resource(hs, resid)
+            delete_resource(hs, args.resource_id)
         except Exception as e:
             print(f'  {str(e)}')
+
+    if args.f:
+        for hsfile in args.f:
+            try:
+                delete_file(hs, args.f, hsfile)
+            except Exception as e:
+                print(f'  {str(e)}')
 
 
 def short_help():
