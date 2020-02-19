@@ -62,8 +62,8 @@ def main(args):
     if args.q:
         log.set_quiet()
 
-    if not (args.f and args.a):
-        print('Must indicate that either the entire resource or the specific files that will be removed, -a or -f. Exiting.')
+    if not (args.files or args.a):
+        print('Please indicate to either delete the entire resource (-a) or specific files (-f). See "hs delete --help" for more information.')
         sys.exit(0)
 
     # connect to hydroshare
@@ -76,14 +76,14 @@ def main(args):
         try:
             delete_resource(hs, args.resource_id)
         except Exception as e:
-            print(f'  {str(e)}')
+            print(f'    REASON: {str(e)}')
 
-    if args.f:
-        for hsfile in args.f:
+    if args.files:
+        for hsfile in args.files:
             try:
-                delete_file(hs, args.f, hsfile)
+                delete_file(hs, args.resource_id, hsfile)
             except Exception as e:
-                print(f'  {str(e)}')
+                print(f'    REASON: {str(e)}')
 
 
 def short_help():

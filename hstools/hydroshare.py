@@ -93,6 +93,26 @@ class hydroshare():
 
         return True
 
+    def deleteResourceFile(self, resid, filepath):
+        """Deletes a hydroshare resource file
+
+        args:
+        -- resid: hydroshare resource id
+        -- filepath: path to file that will be deleted
+
+        returns:
+        -- True if successful, else False
+        """
+
+        try:
+            self.hs.deleteResourceFile(resid, filepath)
+            logger.info(f'+ successfully removed file: {resid}->{filepath}')
+        except Exception as e:
+            logger.error(f'- failed to remove resource file: {resid}->{filepath}')
+            raise Exception(e)
+
+        return True
+
     def getResourceMetadata(self, resid):
         """Gets metadata for a specified resource.
 
