@@ -44,6 +44,9 @@ def add_arguments(parser):
                         help='output in json format')
     parser.add_argument('-l', '--long', default=False, action='store_true',
                         help='long output format')
+    parser.add_argument('-t', '--terms', nargs='+', type=str,
+                        help='specific metadata terms to return, e.g. ' +
+                        'authors, abstract, date_created, etc.', )
     parser.add_argument('-v', default=False, action='store_true',
                         help='verbose output')
 
@@ -68,10 +71,21 @@ def main(args):
     for r in args.resource_id:
         try:
             meta = hs.getResourceMetadata(r)
-            meta_dict = {k: v for k, v in vars(meta).items() if not k.startswith('_')}
+            meta_dict = {k: v for k, v in vars(meta).items()
+                         if not k.startswith('_')}
+
+            if args.terms:
+                # filter based on specified data types
+                meta_filtered = {}
+                for term in args.terms:
+                    if term in meta_dict.keys():
+                        meta_filtered[term] = meta_dict[term]
+                    else:
+                        logger.error(f'  - Unknown metadata term {term}')
+                meta_dict = meta_filtered
 
             # if not verbose, remove some of the metadata
-            if not args.long:
+            elif not args.long:
                 short_keys = ['abstract',
                               'authors',
                               'creators',
@@ -91,7 +105,6 @@ def main(args):
                 for creator in meta_dict['creators']:
                     creator_values.append(creator['name'])
                 meta_dict['creators'] = ';'.join(creator_values)
-
 
             if args.yaml:
                 print(yaml.dump(meta_dict))
