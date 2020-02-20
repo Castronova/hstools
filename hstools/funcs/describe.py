@@ -47,10 +47,6 @@ def add_arguments(parser):
     parser.add_argument('-v', default=False, action='store_true',
                         help='verbose output')
 
-    # potential output options
-    # default is yaml text
-    # -xml -json -tabular (pandas), yaml?
-
     set_usage(parser)
 
 
@@ -97,8 +93,6 @@ def main(args):
                 meta_dict['creators'] = ';'.join(creator_values)
 
 
-#            if args.x:
-#                science_metadata = hs.getScienceMetadataRDF(r)
             if args.yaml:
                 print(yaml.dump(meta_dict))
 
@@ -111,24 +105,6 @@ def main(args):
 
         except Exception as e:
             print(e)
-#
-#        # print output using specified format
-#        if args.yaml:
-#            print_yaml()
-#
-#
-#        response = hs.getResourceFiles(args.resource_id)
-#        res_files = []
-#        if len(response) > 0:
-#            for r in response:
-#                # get the filepath from the content url field
-#                file_path = r['url'].split('contents')[-1]
-#                # remove slash at beginning
-#                file_path = file_path[1:] if file_path[0] == '/' else file_path
-#                res_files.append(file_path)
-#    except Exception:
-#        raise Exception('Error connecting to HydroShare resource')
-
 
 def short_help():
     return 'Describe metadata and files'
