@@ -4,14 +4,30 @@ import sys
 import json
 import yaml
 import argparse
+from itertools import groupby
 from hstools import hydroshare, log
 
 logger = log.logger
 
 
-#def add_file(hs, resid, source, target):
-#
-#    return hs.addContentToExistingResource(resid, source, target=target)
+def get_tree(group, items, path):
+
+    sep = lambda i: i.split('/', 1)
+    head = [i for i in items if len(sep(i)) == 2]
+    tail = [i for i in items if len(sep(i)) == 1]
+    gv = groupby(sorted(head), lambda i: sep(i)[0])
+    return group, dict([(i, path+i) for i in tail] + [get_tree(g, [sep(i)[1] for i in v], path+g+'/') for g, v in gv])
+
+
+def tree_print(d, indent=0, prefix=''):
+#    file_middle = '├──'
+#    folder_last = '│   '
+    folder = '└──'
+    for key, value in d.items():
+        print(' ' * indent + f'{prefix} {str(key)}')
+        if isinstance(value, dict):
+            next_prefix = folder
+            tree_print(value, indent+1, next_prefix)
 
 
 def set_usage(parser):
@@ -114,10 +130,20 @@ def main(args):
                 print(json.dumps(meta_dict,
                                  indent=4,
                                  sort_keys=True))
+
+            # organize files for tree printing
+            urls = []
+            for file_info in hs.getResourceFiles(r):
+                rpth = file_info['url'].split('contents/')[-1]
+                urls.append(rpth)
+            ftree = dict([get_tree('tree', urls, '')])['tree']
+            tree_print(ftree)
+
             print('-' * 50)
 
         except Exception as e:
             print(e)
+
 
 def short_help():
     return 'Describe metadata and files'
