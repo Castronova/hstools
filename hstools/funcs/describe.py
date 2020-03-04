@@ -54,7 +54,7 @@ def add_arguments(parser):
     parser.add_argument('resource_id',
                         nargs='+', type=str,
                         help='unique HydroShare resource identifier')
-    parser.add_argument('-y', '--yaml', default=False, action='store_true',
+    parser.add_argument('-y', '--yaml', default=True, action='store_true',
                         help='output in yaml format')
     parser.add_argument('-j', '--json', default=False, action='store_true',
                         help='output in json format')
