@@ -11,7 +11,6 @@ logger = log.logger
 
 
 def get_tree(group, items, path):
-
     sep = lambda i: i.split('/', 1)
     head = [i for i in items if len(sep(i)) == 2]
     tail = [i for i in items if len(sep(i)) == 1]
@@ -123,6 +122,15 @@ def main(args):
                 meta_dict['creators'] = ';'.join(creator_values)
 
             if args.yaml:
+                class literal(str):
+                    pass
+
+                def literal_presenter(dumper, data):
+                    return dumper.represent_scalar('tag:yaml.org,2002:str',
+                                                   data, style='|')
+                yaml.add_representer(literal, literal_presenter)
+                v = meta_dict['abstract']
+                meta_dict['abstract'] = literal(v)
                 print(yaml.dump(meta_dict))
 
             if args.json:
