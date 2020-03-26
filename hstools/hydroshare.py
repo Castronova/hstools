@@ -251,6 +251,8 @@ class hydroshare():
 
         self.content = content
 
+
+
 #    def getContentFiles(self, resourceid):
 #        """Gets the content files for a resource that exists on the
 #           Jupyter Server
