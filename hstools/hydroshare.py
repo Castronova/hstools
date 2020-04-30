@@ -64,6 +64,11 @@ class hydroshare():
         # get user info
         self.user_info = self.hs.getUserInfo()
 
+    def restClient(self):
+        """
+        Exposes the underlying hs_restclient object
+        """
+        return self.hs
 
     def close(self):
         """
