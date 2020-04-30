@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+!/usr/bin/env python3
 
 import sys
 import json
@@ -16,6 +16,19 @@ def get_tree(group, items, path):
     tail = [i for i in items if len(sep(i)) == 1]
     gv = groupby(sorted(head), lambda i: sep(i)[0])
     return group, dict([(i, path+i) for i in tail] + [get_tree(g, [sep(i)[1] for i in v], path+g+'/') for g, v in gv])
+
+
+def print_yaml(meta_dict):
+    class literal(str):
+        pass
+
+    def literal_presenter(dumper, data):
+        return dumper.represent_scalar('tag:yaml.org,2002:str',
+                                       data, style='|')
+    yaml.add_representer(literal, literal_presenter)
+    v = meta_dict['abstract']
+    meta_dict['abstract'] = literal(v)
+    print(yaml.dump(meta_dict))
 
 
 def tree_print(d, indent=0, prefix=''):
@@ -122,16 +135,8 @@ def main(args):
                 meta_dict['creators'] = ';'.join(creator_values)
 
             if args.yaml:
-                class literal(str):
-                    pass
+                print_yaml(meta_dict)
 
-                def literal_presenter(dumper, data):
-                    return dumper.represent_scalar('tag:yaml.org,2002:str',
-                                                   data, style='|')
-                yaml.add_representer(literal, literal_presenter)
-                v = meta_dict['abstract']
-                meta_dict['abstract'] = literal(v)
-                print(yaml.dump(meta_dict))
 
             if args.json:
                 # query scientific metadata
