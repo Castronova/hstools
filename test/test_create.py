@@ -9,7 +9,7 @@ from hstools.resource import ResourceMetadata
 
 class TestCreate(unittest.TestCase):
     testfile = 'testfile.txt'
-    authfile = os.path.abspath('test/hs_auth_oauth')
+    authfile = os.path.abspath('test/hs_auth_basic')
 
     def setUp(self):
 
@@ -26,14 +26,16 @@ class TestCreate(unittest.TestCase):
         title = 'unit testing'
         abstract = 'this is a resource created by a unittest'
         keywords = ['test']
-
         # test that resource is created successfully without files
         hs = hydroshare.hydroshare(authfile=self.authfile)
-        resid = hs.createResource(abstract,
-                                  title,
-                                  keywords,
-                                  content_files=[])
-        self.assertTrue(resid is not None)
+        try:
+            resid = hs.createResource(abstract,
+                                      title,
+                                      keywords,
+                                      content_files=[])
+            self.assertTrue(resid is not None)
+        except Exception as e:
+            print(e.status_msg)
 
         scimeta = hs.getResourceMetadata(resid)
         self.assertTrue(type(scimeta) == ResourceMetadata)

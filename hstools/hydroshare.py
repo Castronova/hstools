@@ -198,7 +198,7 @@ class hydroshare():
 
         args:
         -- resid: id of an existing hydroshare resource (str)
-        -- source: file paths to be added to resource
+        -- source: file path to be added to resource
         -- target: target path relative to the root directory of the resource
 
         returns:
@@ -250,6 +250,8 @@ class hydroshare():
                   '{resourceid}')
 
         self.content = content
+
+
 
 #    def getContentFiles(self, resourceid):
 #        """Gets the content files for a resource that exists on the

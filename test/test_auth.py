@@ -25,7 +25,7 @@ class TestAuth(unittest.TestCase):
 
         # test that exception is raised when authfile isn't found
         with self.assertRaises(Exception):
-            hs = auth.oauth2_authorization(authfile='/tmp/auth')
+            hs = auth.basic_authorization(authfile='/tmp/auth')
             hs.session.close()
 
         # test that it works with correct auth_location path
