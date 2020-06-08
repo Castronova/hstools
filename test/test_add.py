@@ -8,7 +8,7 @@ from hstools import hydroshare
 class TestAdd(unittest.TestCase):
     testfile = 'testfile1.txt'
     testfile2 = 'testfile2.txt'
-    authfile = os.path.abspath('test/hs_auth_oauth')
+    authfile = os.path.abspath('test/hs_auth_basic')
     title = 'unit testing'
     abstract = 'this is a resource created by a unittest'
     keywords = ['test']
@@ -36,7 +36,7 @@ class TestAdd(unittest.TestCase):
                                   content_files=[])
         self.assertTrue(resid is not None)
 
-        resid = hs.addContentToExistingResource(resid, [self.testfile])
+        resid = hs.addContentToExistingResource(resid, self.testfile)
         self.assertTrue(resid is not None)
 
         hs.hs.deleteResource(resid)
@@ -53,8 +53,8 @@ class TestAdd(unittest.TestCase):
 
         # test that an exception is raised if an input file doesn't exist
         with self.assertRaises(Exception):
-            files = ['file_that_doesnt_exist.txt']
-            resid = hs.addContentToExistingResource(resid, files)
+            f = 'file_that_doesnt_exist.txt'
+            resid = hs.addContentToExistingResource(resid, f)
 
         hs.hs.deleteResource(resid)
         hs.close()
@@ -70,8 +70,9 @@ class TestAdd(unittest.TestCase):
 
         # test that resource is created successfully with list input
         files = [self.testfile, self.testfile2]
-        resid = hs.addContentToExistingResource(resid, files)
-        self.assertTrue(resid is not None)
+        for f in files:
+            resid = hs.addContentToExistingResource(resid, f)
+            self.assertTrue(resid is not None)
 
         # get file from resource, make sure it exists in the resource
         filenames = [r['file_name'] for r in hs.getResourceFiles(resid)]
