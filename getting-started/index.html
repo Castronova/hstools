@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Getting Started - HSTools</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Getting Started";
+    var mkdocs_page_input_path = "getting-started.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> HSTools</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Getting Started</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#install-using-pip">Install using Pip</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#install-from-source">Install from source</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#connect-to-hydroshare">Connect to HydroShare</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#create-resource">Create Resource</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#list-resources">List Resources</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#download-resource">Download Resource</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#add-files">Add Files</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#deleting-resource">Deleting Resource</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../examples/">Examples</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../reference/">Reference</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../contributing/">Contributing</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">HSTools</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Getting Started</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="getting-started">Getting Started</h1>
+<h2 id="installation">Installation</h2>
+<p>This <code>hstools</code> package is currently only supported on MacOSX and Linux. It can be installed using the Python package installer (Pip) or directly from source.</p>
+<h3 id="install-using-pip">Install using Pip</h3>
+<p>The <code>hstools</code> package can be found at <a href="https://pypi.org/project/HSTools/">https://pypi.org/project/HSTools/</a> and installed using the following command.</p>
+<pre><code>pip install hstools
+</code></pre>
+
+<h3 id="install-from-source">Install from source</h3>
+<p>The source code for <code>hstools</code> can be found at <a href="https://github.com/Castronova/hstools">https://github.com/Castronova/hstools</a>. Perform the following commands to install from source.</p>
+<pre><code>git clone https://github.com/Castronova/hstools 
+cd hstools
+python setup.py install
+</code></pre>
+
+<h2 id="overview">Overview</h2>
+<p>After the libary is installed, it can be executed using the following command: <code>hs</code>. There are currently 6 options for interacting with HydroShare: <code>get</code>, <code>add</code>, <code>create</code>, <code>delete</code>, <code>ls</code>, and <code>init</code>. For detailed information about any of these add the <code>--help</code> flag after the options, e.g. <code>$hs get --help</code>.</p>
+<pre><code>$ hs
+usage: hs [-h] {get,add,create,delete,ls,init} ...
+
+HSTools is a humble collection of tools for interacting with data in the
+HydroShare repository. It wraps the HydroShare REST API to provide simple
+commands for working with resources.
+
+positional arguments:
+  {get,add,create,delete,ls,init}
+    get                 Retrieve resource content from HydroShare
+    add                 Add files to an existing HydroShare resource
+    create              Create a new HydroShare resource
+    delete              Delete a HydroShare resource
+    list                List HydroShare resources that you own
+    init                Initialize a connection with HydroShare
+
+optional arguments:
+  -h, --help            show this help message and exit
+</code></pre>
+
+<h3 id="connect-to-hydroshare">Connect to HydroShare</h3>
+<p>Connect to HydroShare using the <code>init</code> option. This will create an authentication file for accessing HydroShare that is cached in your <code>$HOME</code> directory by default. This path can be changed using the <code>-d</code> flag. Note, this command only needs to be executed once.</p>
+<pre><code>$ hs init
+Enter HydroShare Username: &lt;username&gt;
+Enter HydroShare Password: &lt;password&gt;
+Auth saved to: ~/.hs_auth
+</code></pre>
+
+<h3 id="create-resource">Create Resource</h3>
+<p>Create a new HydroShare resource using the <code>create</code> options.</p>
+<pre><code>$ hs create \
+-a This is the abstract of my resource \
+-t My resource Title \
+-k keyword1 keyword2 keyword3 \
+-f myfile.txt ./another/file.txt 
+</code></pre>
+
+<h3 id="list-resources">List Resources</h3>
+<p>Listing HydroShare resources using the <code>ls</code> options.</p>
+<pre><code>$ hs list
+</code></pre>
+
+<p>List files in long format</p>
+<pre><code>$ hs list -l
+</code></pre>
+
+<p>List the first 17 resources in long format</p>
+<pre><code>$ hs list -l -n 17
+</code></pre>
+
+<p>Filter resources by published</p>
+<pre><code>$ hs list -filter published=true
+</code></pre>
+
+<h3 id="download-resource">Download Resource</h3>
+<p>Downloading data from the HydroShare platform is done using globally unique identfiers (GUID). This GUIDs are defined for every HydroShare resource and can be aquired from a resources URL. The <code>get</code> option downloads the resource bagit archive and unzips it into a directory of your choosing.</p>
+<pre><code>$ hs get &lt;hydroshare resource id&gt;
+</code></pre>
+
+<h3 id="add-files">Add Files</h3>
+<p>Add files to an existing HydroShare resource using the <code>add</code> option. This command allows you to optionally overwrite (<code>--overwrite</code>) files thatalready exist in a resource, which is helpful when updating content.</p>
+<pre><code>$ hs add &lt;hydroshare resource id&gt; -f my-file.txt my-other-file.txt
+</code></pre>
+
+<h3 id="deleting-resource">Deleting Resource</h3>
+<p>Delete an entire HydroShare resource using the <code>delete</code> option. This is useful for cleaning up your HydroShare workspace. BEWARE: THIS WILL PERMANENTLY DELETE YOUR HYDROSHARE RESOURCE DATA.</p>
+<pre><code>$ hs delete &lt;hydroshare resource id&gt;
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../examples/" class="btn btn-neutral float-right" title="Examples">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../examples/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

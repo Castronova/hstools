@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Reference - HSTools</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Reference";
+    var mkdocs_page_input_path = "reference.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> HSTools</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Getting Started</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../examples/">Examples</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Reference</a>
+    <ul class="current">
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../contributing/">Contributing</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">HSTools</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Reference</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a name="hstools"></a></p>
+<h1 id="hstools">hstools</h1>
+<p><a name="hstools.auth"></a></p>
+<h1 id="hstoolsauth">hstools.auth</h1>
+<p>This is a test</p>
+<p><a name="hstools.auth.basic_authorization"></a></p>
+<h4 id="basic_authorization">basic_authorization</h4>
+<pre><code class="python">basic_authorization(authfile='~/.hs_auth_basic')
+</code></pre>
+
+<p>performs basic HS authorization using username and password stored in
+~/.hs_auth_basic file in the following format (b64 encoded):</p>
+<p>{
+    "usr": "<username>"
+    "pwd": "<password>"
+}</p>
+<p>Returns hs_restclient instance or None</p>
+<p><a name="hstools.auth.oauth2_authorization"></a></p>
+<h4 id="oauth2_authorization">oauth2_authorization</h4>
+<pre><code class="python">oauth2_authorization(authfile='~/.hs_auth')
+</code></pre>
+
+<p>performs HS authorization using OAuth2 credentials stored in
+~/.hs_auth file, in a pickled binary format.</p>
+<p>Returns hs_restclient instance or None</p>
+<p><a name="hstools.compat"></a></p>
+<h1 id="hstoolscompat">hstools.compat</h1>
+<p><a name="hstools.log"></a></p>
+<h1 id="hstoolslog">hstools.log</h1>
+<p><a name="hstools.resource"></a></p>
+<h1 id="hstoolsresource">hstools.resource</h1>
+<p><a name="hstools.threads"></a></p>
+<h1 id="hstoolsthreads">hstools.threads</h1>
+<p><a name="hstools.funcs"></a></p>
+<h1 id="hstoolsfuncs">hstools.funcs</h1>
+<p><a name="hstools.funcs.delete"></a></p>
+<h1 id="hstoolsfuncsdelete">hstools.funcs.delete</h1>
+<p><a name="hstools.funcs.describe"></a></p>
+<h1 id="hstoolsfuncsdescribe">hstools.funcs.describe</h1>
+<p><a name="hstools.funcs.add"></a></p>
+<h1 id="hstoolsfuncsadd">hstools.funcs.add</h1>
+<p><a name="hstools.funcs.create"></a></p>
+<h1 id="hstoolsfuncscreate">hstools.funcs.create</h1>
+<p><a name="hstools.funcs.ls"></a></p>
+<h1 id="hstoolsfuncsls">hstools.funcs.ls</h1>
+<p><a name="hstools.funcs.content"></a></p>
+<h1 id="hstoolsfuncscontent">hstools.funcs.content</h1>
+<p><a name="hstools.funcs.init"></a></p>
+<h1 id="hstoolsfuncsinit">hstools.funcs.init</h1>
+<p><a name="hstools.funcs.get"></a></p>
+<h1 id="hstoolsfuncsget">hstools.funcs.get</h1>
+<p><a name="hstools.progress"></a></p>
+<h1 id="hstoolsprogress">hstools.progress</h1>
+<p><a name="hstools.utilities"></a></p>
+<h1 id="hstoolsutilities">hstools.utilities</h1>
+<p><a name="hstools.utilities.get_server_url_for_path"></a></p>
+<h4 id="get_server_url_for_path">get_server_url_for_path</h4>
+<pre><code class="python">get_server_url_for_path(p)
+</code></pre>
+
+<p>gets the url corresponding to a given file or directory path
+p : path to convert into a url</p>
+<p>returns the url path for the filepath p</p>
+<p><a name="hstools.utilities.get_relative_path"></a></p>
+<h4 id="get_relative_path">get_relative_path</h4>
+<pre><code class="python">get_relative_path(p)
+</code></pre>
+
+<p>gets the path relative to the jupyter home directory
+p: path to convert into relative path</p>
+<p>returns the path relative to the default jupyter home directory</p>
+<p><a name="hstools.hydroshare"></a></p>
+<h1 id="hstoolshydroshare">hstools.hydroshare</h1>
+<p><a name="hstools.hydroshare.hydroshare"></a></p>
+<h2 id="hydroshare-objects">hydroshare Objects</h2>
+<pre><code class="python">class hydroshare()
+</code></pre>
+
+<p><a name="hstools.hydroshare.hydroshare.__init__"></a></p>
+<h4 id="__init__">__init__</h4>
+<pre><code class="python"> | __init__(save_dir=None, authfile='~/.hs_auth')
+</code></pre>
+
+<p>save_dir is the location that data will hs resources will be saved.</p>
+<p><a name="hstools.hydroshare.hydroshare.close"></a></p>
+<h4 id="close">close</h4>
+<pre><code class="python"> | close()
+</code></pre>
+
+<p>closes the connection to HydroShare</p>
+<p><a name="hstools.hydroshare.hydroshare.deleteResource"></a></p>
+<h4 id="deleteresource">deleteResource</h4>
+<pre><code class="python"> | deleteResource(resid)
+</code></pre>
+
+<p>Deletes a hydroshare resource</p>
+<p>args:
+-- resid: hydroshare resource id</p>
+<p>returns:
+-- True if successful, else False</p>
+<p><a name="hstools.hydroshare.hydroshare.getResourceMetadata"></a></p>
+<h4 id="getresourcemetadata">getResourceMetadata</h4>
+<pre><code class="python"> | getResourceMetadata(resid)
+</code></pre>
+
+<p>Gets metadata for a specified resource.</p>
+<p>args:
+-- resid: hydroshare resource id</p>
+<p>returns:
+-- resource metadata object</p>
+<p><a name="hstools.hydroshare.hydroshare.createResource"></a></p>
+<h4 id="createresource">createResource</h4>
+<pre><code class="python"> | createResource(abstract, title, keywords=[], content_files=[])
+</code></pre>
+
+<p>Creates a hydroshare resource.</p>
+<p>args:
+-- abstract: abstract for resource (str, required)
+-- title: title of resource (str, required)
+-- keywords: list of subject keywords (list, default=&gt;[])
+-- content_files: data to save as resource content (list, default=&gt;[])</p>
+<p>returns:
+-- resource_id</p>
+<p><a name="hstools.hydroshare.hydroshare.getResource"></a></p>
+<h4 id="getresource">getResource</h4>
+<pre><code class="python"> | getResource(resourceid)
+</code></pre>
+
+<p>Downloads content of a hydroshare resource.</p>
+<p>args:
+-- resourceid: id of the hydroshare resource (str)</p>
+<p>returns:
+-- None</p>
+<p><a name="hstools.hydroshare.hydroshare.getResourceFiles"></a></p>
+<h4 id="getresourcefiles">getResourceFiles</h4>
+<pre><code class="python"> | getResourceFiles(resid)
+</code></pre>
+
+<p>returns a list of files in a hydroshare resource</p>
+<p><a name="hstools.hydroshare.hydroshare.addContentToExistingResource"></a></p>
+<h4 id="addcontenttoexistingresource">addContentToExistingResource</h4>
+<pre><code class="python"> | addContentToExistingResource(resid, source, target=None)
+</code></pre>
+
+<p>Adds content files to an existing hydroshare resource.</p>
+<p>args:
+-- resid: id of an existing hydroshare resource (str)
+-- source: file path to be added to resource
+-- target: target path relative to the root directory of the resource</p>
+<p>returns:
+-- None</p>
+<p><a name="hstools.hydroshare.hydroshare.loadResourceFromLocal"></a></p>
+<h4 id="loadresourcefromlocal">loadResourceFromLocal</h4>
+<pre><code class="python"> | loadResourceFromLocal(resourceid)
+</code></pre>
+
+<p>Loads the contents of a previously downloaded resource.</p>
+<p>args:
+-- resourceid: the id of the resource that has been downloaded (str)</p>
+<p>returns:
+-- {content file name: path}</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../contributing/" class="btn btn-neutral float-right" title="Contributing">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../examples/" class="btn btn-neutral" title="Examples"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../examples/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../contributing/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
