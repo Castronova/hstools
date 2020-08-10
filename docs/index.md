@@ -1,17 +1,12 @@
-# Welcome to MkDocs
+# Welcome to HSTools
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+A humble collection of HydroShare tools written in Python 3. The `hstools` library was originally a port of the CUAHSI JupyterHub `utilities.hydroshare` package modified to work on desktop computers. The goal is to provide a set of basic functions that simplify working with HydroShare data.
 
-## Commands
+## Documentation
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+* [Getting Started](getting-started.md) -  Everything you need to get started using `hstools`
+* [Commands](commands.md) - A comprehensive list of `hstools` commands.
+* Examples - Example use of `HSTools` (Coming Soon)
+* Help and Reference - (Coming Soon)
+* Contributing - A guide to contributing (Coming Soon)
 
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
