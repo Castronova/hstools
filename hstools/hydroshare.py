@@ -135,13 +135,15 @@ class hydroshare():
         resid = self.hs.createResource('CompositeResource',
                                        title=title,
                                        abstract=abstract,
-                                       resource_file=f,
                                        keywords=keywords)
 
         # add the remaining content files to the hs resource
         try:
             if len(content_files) > 1:
-                self.addContentToExistingResource(resid, content_files[1:])
+                # loop over each file and add it to the new HS resource
+                for cf in content_files:
+                    self.addContentToExistingResource(resid,
+                                                      cf)
         except Exception as e:
             logger.error(e)
 
@@ -208,8 +210,12 @@ class hydroshare():
         # make sure input files exist
         if not os.path.exists(source):
             raise Exception(f'Could not find file: {f}')
+        
+        if target is None:
+            logger.info(f'+ adding: {source}')
+        else:
+            logger.info(f'+ adding: {source} -> {target}')
 
-        logger.info(f'+ adding: {source} -> {target}')
         self.hs.addResourceFile(resid, source, target)
 
         return resid
