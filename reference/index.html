@@ -52,15 +52,11 @@
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="" href="../getting-started.md">Getting Started</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Getting Started</a>
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../commands/">Commands</a>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="" href="../examples.md">Examples</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../examples/">Examples</a>
                     </li>
                 </ul>
                 <ul class="current">
@@ -70,11 +66,11 @@
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="" href="../contributing.md">Contributing</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../contributing/">Contributing</a>
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="" href="../about.md">About</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
                     </li>
                 </ul>
       </div>
@@ -113,28 +109,19 @@
 <h1 id="hstools">hstools</h1>
 <p><a name="hstools.auth"></a></p>
 <h1 id="hstoolsauth">hstools.auth</h1>
+<p>This is a test</p>
 <p><a name="hstools.auth.basic_authorization"></a></p>
 <h4 id="basic_authorization">basic_authorization</h4>
 <pre><code class="python">basic_authorization(authfile='~/.hs_auth_basic')
 </code></pre>
 
-<p>This function performs basic HS authorization using username and password stored in an external file, e.g. ~/.hs_auth_basic. The file should be b64 encoded and contain JSON dictionary of username and password.</p>
-<p><strong>Arguments</strong>:</p>
-<ul>
-<li><code>authfile</code>: base64 encoded authorization file of the format</li>
-</ul>
-<p>This is a simple example::</p>
-<pre><code>import math
-print 'import done'
-
-{
-&quot;usr&quot;: &quot;username&quot;,
-&quot;pwd&quot;: &quot;password&quot;
-}
-</code></pre>
-
-<p><strong>Returns</strong>:</p>
-<p><code>HydroShare.HydroShare</code> object or None</p>
+<p>performs basic HS authorization using username and password stored in
+~/.hs_auth_basic file in the following format (b64 encoded):</p>
+<p>{
+    "usr": "<username>"
+    "pwd": "<password>"
+}</p>
+<p>Returns hs_restclient instance or None</p>
 <p><a name="hstools.auth.oauth2_authorization"></a></p>
 <h4 id="oauth2_authorization">oauth2_authorization</h4>
 <pre><code class="python">oauth2_authorization(authfile='~/.hs_auth')
@@ -286,8 +273,10 @@ p: path to convert into relative path</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="../contributing/" class="btn btn-neutral float-right" title="Contributing">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-        <a href="../commands/" class="btn btn-neutral" title="Commands"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+        <a href="../examples/" class="btn btn-neutral" title="Examples"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -313,8 +302,10 @@ p: path to convert into relative path</p>
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../commands/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../examples/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
+      
+        <span style="margin-left: 15px"><a href="../contributing/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
