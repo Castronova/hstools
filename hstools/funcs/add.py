@@ -46,9 +46,8 @@ def add_arguments(parser):
                              'relative to the root directory using the '
                              'following syntax - <source-path>:<target-path>.'
                         )
-    parser.add_argument('--overwrite', action='store_true',
-                        help='overwrite existing resource files with the'
-                             'same name')
+    parser.add_argument('-r', action='store_true',
+                        help='replace existing resource files same name')
     parser.add_argument('-v', default=True, action='store_true',
                         help='verbose output')
     parser.add_argument('-q', default=False, action='store_true',
@@ -115,9 +114,9 @@ def main(args):
                 file_conflicts.append(rf)
 
     if len(file_conflicts) > 0:
-        if not args.overwrite:
+        if not args.r:
             for fc in file_conflicts:
-                print(f' - {fc} already exists, use --overwrite to replace')
+                print(f' - {fc} already exists, use -r option to replace')
                 res_files.pop(res_files.index(fc))
                 tidx = targets.index(fc)
                 sources.pop(tidx)
@@ -160,7 +159,7 @@ def long_help():
     return """Add files to an existing HydroShare resource. Multiple files
               can be added at once and folders are created as necessary.
               By default existing files will not be replaced, use the
-              --overwrite option if this is desired.
+              -r (replace) option if this is desired.
             """
 
 
