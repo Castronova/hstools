@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import json
 import argparse
 from enum import Enum
 from hstools import hydroshare
@@ -18,6 +19,16 @@ class Filters(Enum):
     PUBLIC = "public"
 
 
+def humansize(nbytes):
+    suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
+    i = 0
+    while nbytes >= 1024 and i < len(suffixes)-1:
+        nbytes /= 1024.
+        i += 1
+    f = ('%.2f' % nbytes).rstrip('0').rstrip('.')
+    return '%s %s' % (f, suffixes[i])
+
+
 def parse_filter(filter_str):
 
     try:
@@ -30,7 +41,8 @@ def parse_filter(filter_str):
 
 
 def print_resource_list(hs, username, filter_dict={},
-                        count=1000000, long_format=False):
+                        count=1000000, long_format=False,
+                        size=False):
 
     # number of resource to query at a time
     qcount = 25
@@ -40,15 +52,27 @@ def print_resource_list(hs, username, filter_dict={},
     kwargs.update(filter_dict)
     cnt = 0
     for r in hs.hs.resources(**kwargs):
+
         cnt += 1
         if cnt > count:
             return
 
+        res_line = f'{r["resource_id"]} '
+        res_size_bytes = 0
+        if size:
+            files = json.loads(hs.hs.resource(r['resource_id']).files.all().content.decode())
+            for f in files['results']:
+                res_size_bytes += int(f['size'])
+
+        if res_size_bytes > 0:
+            res_line += f'[{humansize(res_size_bytes)}]'
+
         if not long_format:
-            print(f'+ {r["resource_title"][:25]:<25} '
-                  f'{r["resource_id"]} ', flush=True)
+            elip = '...' if len(r['resource_title']) > 25 else ''
+            print(f'+ {r["resource_title"][:25]:<25}{elip} - '
+                  f'{res_line} ', flush=True)
         else:
-            print(f'\n+ {r["resource_id"]} ')
+            print(f'\n+ {res_line} ')
             print(f'   title: {r["resource_title"]}')
             print(f'   date created: {r["date_created"]}')
             print(f'   owner: {r["creator"]}')
@@ -80,6 +104,8 @@ def add_arguments(parser):
                         help='list in long format')
     parser.add_argument('-n', default=1000000, type=int,
                         help='number of resources to show')
+    parser.add_argument('-s', default=False, action='store_true',
+                        help='show resource size')
     parser.add_argument('-filter', nargs='*',
                         help='filter resource by metadata attribute, e.g '
                         'owner=<USERNAME> author=<USERNAME> '
@@ -107,7 +133,7 @@ def main(args):
     userinfo = hs.userInfo()
 
     print_resource_list(hs, userinfo['username'], filter_dict=filters,
-                        count=args.n, long_format=args.l)
+                        count=args.n, long_format=args.l, size=args.s)
 
 
 def short_help():
