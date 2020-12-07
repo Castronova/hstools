@@ -60,15 +60,22 @@ def print_resource_list(hs, username, filter_dict={},
         res_line = f'{r["resource_id"]} '
         res_size_bytes = 0
         if size:
-            files = json.loads(hs.hs.resource(r['resource_id']).files.all().content.decode())
-            for f in files['results']:
-                res_size_bytes += int(f['size'])
+            try:
+                files = json.loads(hs.hs.resource(r['resource_id']).files.all().content.decode())
+                for f in files['results']:
+                    res_size_bytes += int(f['size'])
+            except Exception:
+                res_size_bytes = -999
 
         if res_size_bytes > 0:
             res_line += f'[{humansize(res_size_bytes)}]'
+        elif res_size_bytes < 0:
+            res_line += f'[ERROR]'
+        else:
+            res_line += f'[?]'
 
         if not long_format:
-            elip = '...' if len(r['resource_title']) > 25 else ''
+            elip = '...' if len(r['resource_title']) > 25 else '   '
             print(f'+ {r["resource_title"][:25]:<25}{elip} - '
                   f'{res_line} ', flush=True)
         else:
