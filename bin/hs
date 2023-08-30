@@ -3,7 +3,7 @@
 
 import sys
 import argparse
-from hstools.funcs import add, get, create, delete, ls, init, describe
+from hstools.funcs import add, move, get, create, delete, ls, init, describe
 
 def print_usage(args):
 
@@ -46,6 +46,11 @@ if __name__ == '__main__':
     hs_add = sub.add_parser('add', help = add.short_help())
     add.add_arguments(hs_add)
     hs_add.set_defaults(func=add.main)
+    
+    # hs move
+    hs_move = sub.add_parser('move', help = move.short_help())
+    move.add_arguments(hs_move)
+    hs_move.set_defaults(func=move.main)
 
     # hs create
     hs_create = sub.add_parser('create', help = create.short_help())

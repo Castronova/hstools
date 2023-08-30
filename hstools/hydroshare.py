@@ -64,6 +64,11 @@ class hydroshare():
         # get user info
         self.user_info = self.hs.getUserInfo()
 
+    def restClient(self):
+        """
+        Exposes the underlying hs_restclient object
+        """
+        return self.hs
 
     def close(self):
         """
@@ -89,6 +94,26 @@ class hydroshare():
             logger.info(f'+ successfully removed resource: {resid}')
         except Exception as e:
             logger.error(f'- failed to remove resource: {resid}')
+            raise Exception(e)
+
+        return True
+
+    def deleteResourceFile(self, resid, filepath):
+        """Deletes a hydroshare resource file
+
+        args:
+        -- resid: hydroshare resource id
+        -- filepath: path to file that will be deleted
+
+        returns:
+        -- True if successful, else False
+        """
+
+        try:
+            self.hs.deleteResourceFile(resid, filepath)
+            logger.info(f'+ successfully removed file: {resid}->{filepath}')
+        except Exception as e:
+            logger.error(f'- failed to remove resource file: {resid}->{filepath}')
             raise Exception(e)
 
         return True
